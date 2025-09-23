@@ -12,56 +12,53 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 import AddImageModal from "../components/AddImageModel";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootNavigatorParamsList } from "../index";
+import ScreenMenuModal from "../components/ScreenModel";
+import { MenuProvider } from "react-native-popup-menu";
+import ScreenModel from "../components/ScreenModel";
+import ColorText from "../components/ColorText";
 
 type HomeProps = NativeStackScreenProps<RootNavigatorParamsList, "home">;
 
 const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [addImageVisible, setAddImageVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   return (
-    <ImageBackground
-      source={{
-        uri: "https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1400&q=80",
-      }}
-      style={styles.background}
-    >
+    <View style={styles.background}>
       <StatusBar barStyle="light-content" />
-      {/* Dark overlay */}
       <View style={styles.overlay} />
 
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Text style={styles.logo}>DEAR DAYS ❤️</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("memory")}>
-          <Entypo name="dots-three-vertical" size={24} color="white" />
-        </TouchableOpacity>
+        <ColorText>Dear Days ❤️</ColorText>
+        <ScreenMenuModal />
       </View>
 
-      {/* Floating Heart Icon */}
+      {/* Floating Heart FAB */}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => setModalVisible(true)}
+        onPress={() => setAddImageVisible(true)}
       >
         <Ionicons name="heart" size={36} color="white" />
       </TouchableOpacity>
 
-      {/* Modal for image upload */}
+      {/* Modals */}
       <AddImageModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        visible={addImageVisible}
+        onClose={() => setAddImageVisible(false)}
       />
-    </ImageBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    justifyContent: "space-between",
+    backgroundColor: "#0000",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.35)",
+    backgroundColor: "#0000",
   },
   topBar: {
     marginTop: 50,

@@ -41,48 +41,6 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ],
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/fonts/ComicNeue-Regular.ttf",
-            "./assets/fonts/Roboto-Regular.ttf"
-          ],
-          "android": {
-            "fonts": [
-              {
-                "fontFamily": "Inter",
-                "fontDefinitions": [
-                  {
-                    "path": "./assets/fonts/ComicNeue-Bold.ttf",
-                    "weight": 700
-                  },
-                  {
-                    "path": "./assets/fonts/ComicNeue-Light.ttf",
-                    "weight": 300
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-Bold.ttf",
-                    "weight": 700
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-Light.ttf",
-                    "weight": 300
-                  }
-                ]
-              }
-            ]
-          },
-          "ios": {
-            "fonts": [
-              "./assets/fonts/ComicNeue-Bold.ttf",
-              "./assets/fonts/ComicNeue-Light.ttf",
-              "./assets/fonts/Roboto-Bold.ttf",
-              "./assets/fonts/Roboto-Light.ttf"
-            ]
-          }
-        }
       ]
     ],
     "experiments": {

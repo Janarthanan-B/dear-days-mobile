@@ -15,7 +15,6 @@ import { RootNavigatorParamsList } from "../index";
 import ScreenMenuModal from "../components/ScreenModel";
 import { MenuProvider } from "react-native-popup-menu";
 import ScreenModel from "../components/ScreenModel";
-import ColorText from "../components/ColorText";
 
 type HomeProps = NativeStackScreenProps<RootNavigatorParamsList, "home">;
 
@@ -30,7 +29,7 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
 
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <ColorText>Dear Days ❤️</ColorText>
+        <Text>Dear Days ❤️</Text>
         <ScreenMenuModal />
       </View>
 

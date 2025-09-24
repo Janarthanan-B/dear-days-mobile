@@ -3,9 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import text from "@/constants/text";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootNavigatorParamsList } from "../index";
+import { useTheme, useThemedStyles } from "@/hooks/ThemeContext";
+import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -31,6 +34,7 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
   const aysAnimations = useRef(
     aysLetters.map(() => new Animated.Value(0))
   ).current;
+  const { toggleTheme, themeName, theme } = useTheme();
 
   useEffect(() => {
     // Step 0: Circular Reveal Animation (scale up white circle)
@@ -97,12 +101,17 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <StatusBar
-          backgroundColor={showExpandedD ? "#ffd5ed" : "#b10667"}
+          backgroundColor={
+            showExpandedD ? theme.backgroundSecoundary : theme.backgroundSplash
+          }
           translucent={true}
         />
         {/* Pink background */}
         <View
-          style={[StyleSheet.absoluteFill, { backgroundColor: "#ffd5ed" }]}
+          style={[
+            StyleSheet.absoluteFill,
+            { backgroundColor: theme.backgroundSplash },
+          ]}
         />
         {/* White circle reveal */}
         <Animated.View
@@ -122,7 +131,11 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
             },
           ]}
         >
-          {showInitialDD && <Text style={styles.text}>DD</Text>}
+          {showInitialDD && (
+            <Animated.Text style={[styles.text, { opacity: revealAnim }]}>
+              DD
+            </Animated.Text>
+          )}
 
           {showExpandedD && (
             <Animated.Text
@@ -185,67 +198,62 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
             </Animated.Text>
           )}
           {showImage && (
-            <Text style={styles.subText}>
-              Every day deserves a {"\n"} dear place.
-            </Text>
+            <Text style={styles.subText}>{text.Common.dearDaysSplashInfo}</Text>
           )}
         </Animated.View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffd5ed", // or pink if still in splash phase
-    height: height,
-    width: width,
-  },
-  // Circular white reveal from center
-  revealCircle: {
-    position: "absolute",
-    top: height / 2 - 100,
-    left: width / 2 - 50,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#ffe9f6",
-  },
-
-  // Text (DD → Dear Days) perfectly centered
-  textContainer: {
-    position: "absolute",
-    top: height / 2 - 90,
-    left: 0,
-    right: 0,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: 64,
-    fontWeight: "bold",
-    color: "#b10667",
-    textAlign: "center",
-    fontFamily: "Comic Neue",
-    letterSpacing: 0,
-  },
-  textNoSpacing: {
-    fontSize: 38,
-    fontWeight: "bold",
-    color: "#b10667",
-    textAlign: "center",
-    fontFamily: "Comic Neue",
-  },
-  subText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#938E8E",
-    textAlign: "center",
-    fontFamily: "Roboto",
-    letterSpacing: 0,
-    paddingTop: 24,
-  },
-});
+const styles = useThemedStyles((theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.backgroundSplash,
+      height: height,
+      width: width,
+    },
+    // Circular white reveal from center
+    revealCircle: {
+      position: "absolute",
+      top: height / 2 - 100,
+      left: width / 2 - 50,
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      backgroundColor: theme.backgroundSecoundary,
+    },
+    // Text (DD → Dear Days) perfectly centered
+    textContainer: {
+      position: "absolute",
+      top: height / 2 - 90,
+      left: 0,
+      right: 0,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    text: {
+      fontSize: 64,
+      color: theme.primary,
+      textAlign: "center",
+      fontFamily: "ComicNeue_700Bold",
+      letterSpacing: 0,
+    },
+    textNoSpacing: {
+      fontSize: 38,
+      color: theme.primary,
+      textAlign: "center",
+      fontFamily: "ComicNeue_700Bold",
+    },
+    subText: {
+      fontSize: 24,
+      color: theme.textInfo,
+      textAlign: "center",
+      fontFamily: "Roboto_300Light",
+      letterSpacing: 0,
+      paddingTop: 24,
+    },
+  })
+);
 
 export default SplashScreen;

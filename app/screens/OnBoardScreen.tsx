@@ -3,6 +3,7 @@ import React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import CoupleInLove from "../../assets/images/couple-in-love.svg";
+import { useThemedStyles } from "@/hooks/ThemeContext";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -38,15 +39,17 @@ export default function OnBoardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ffff",
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-});
+const styles = useThemedStyles((theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: theme.backgroundPrimary + "CC",
+    },
+    title: {
+      fontSize: 28,
+      color: theme.textPrimary,
+    },
+  })
+);

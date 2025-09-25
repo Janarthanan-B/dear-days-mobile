@@ -1,26 +1,22 @@
+import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
-import React, { useState } from "react";
+import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import CoupleFloatingBallons from "../../assets/images/couple-floating-balloons.svg";
+import CoupleInLove from "../../assets/images/couple-in-love.svg";
+import PrimaryButton from "../components/common/PrimaryButton";
 
-import text from "@/constants/text";
 import { StackActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import PrimaryButton from "../components/common/PrimaryButton";
-import PrimaryTextField from "../components/common/TextField";
 import { RootNavigatorParamsList } from "../index";
 
 const { width, height } = Dimensions.get("screen");
-type Props = NativeStackScreenProps<RootNavigatorParamsList, "onBoard">;
+type Props = NativeStackScreenProps<RootNavigatorParamsList, "welcome">;
 
-const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
+const WelocmeScreen: React.FC<Props> = ({ navigation }) => {
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
-  const [name, setName] = useState("");
-  const [partnerName, setPartnerName] = useState("");
-  const [date, setDate] = useState("");
 
   const onButtonClick = () => {
     navigation.dispatch(StackActions.replace("onBoard"));
@@ -29,32 +25,17 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <View style={styles.formConatiner}>
-          <Text style={styles.welcomeHeader}>{text.OnBoard.aboutYou}</Text>
-          <PrimaryTextField
-            placeholder={text.OnBoard.yourName}
-            value={name}
-            onChangeText={setName}
-          />
-          <PrimaryTextField
-            placeholder={text.OnBoard.yourPartnerName}
-            value={partnerName}
-            onChangeText={setPartnerName}
-          />
-          <PrimaryTextField
-            placeholder={text.OnBoard.whenTogether}
-            value={date}
-            onChangeText={setDate}
-            keyboardType="numeric"
-          />
+          <Text style={styles.welcomeHeader}>{text.Common.welcome}</Text>
+          <Text style={styles.welcomeNote}>{text.Common.welcomeNote}</Text>
         </View>
         <View style={styles.imageContainer}>
           <View style={styles.button}>
             <PrimaryButton
-              title={text.Navigation.next}
+              title={text.Navigation.continue}
               onPress={onButtonClick}
             />
           </View>
-          <CoupleFloatingBallons />
+          <CoupleInLove />
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -79,7 +60,6 @@ const createStyles = (themeName: ThemeName) => {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      gap: 24,
     },
     button: {
       paddingVertical: 24,
@@ -94,7 +74,7 @@ const createStyles = (themeName: ThemeName) => {
       fontSize: 28,
       color: theme.textPrimary,
       textAlign: "center",
-      fontFamily: "Roboto_500Medium",
+      fontFamily: "Roboto_700Bold",
       letterSpacing: 0,
       paddingBottom: 24,
     },
@@ -102,11 +82,11 @@ const createStyles = (themeName: ThemeName) => {
       fontSize: 16,
       color: theme.primary,
       textAlign: "center",
-      fontFamily: "Roboto_500Medium",
+      fontFamily: "Roboto_700Bold",
       letterSpacing: 0,
       paddingBottom: 24,
     },
   });
 };
 
-export default OnBoardScreen;
+export default WelocmeScreen;

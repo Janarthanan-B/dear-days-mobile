@@ -1,0 +1,207 @@
+// import React, { useState } from 'react';
+// import {
+//   Dimensions,
+//   KeyboardTypeOptions,
+//   Platform,
+//   StyleSheet,
+//   TextInput,
+//   View,
+// } from 'react-native';
+
+// import Themes from '../../asset/themes/Themes';
+
+// import {
+//   errorMessage,
+//   fieldValidation,
+//   InputValidationType,
+// } from '../../utils/Validators';
+// import Typography from './Typography';
+
+// interface InputFieldProps {
+//   label: string;
+//   placeholder?: string;
+//   onChangeText?: (text: string) => void;
+//   keyboardType?: KeyboardTypeOptions;
+//   multiline?: boolean;
+//   maxLength?: number;
+//   required?: boolean;
+//   value?: string;
+//   validationType?: InputValidationType;
+//   validateValue?: number;
+//   error?: (isError: boolean) => void;
+//   autoCapitalize?: 'sentences' | 'words' | 'characters';
+//   editable?: boolean;
+// }
+// const screenWidth = Dimensions.get('window').width;
+
+// const InputField: React.FC<InputFieldProps> = ({
+//   label = '',
+//   placeholder,
+//   onChangeText,
+//   keyboardType = 'default',
+//   multiline = false,
+//   maxLength,
+//   required = false,
+//   value = '',
+//   validationType,
+//   validateValue,
+//   error,
+//   autoCapitalize,
+//   editable = true,
+// }) => {
+//   const inputLabel = required ? `${label} *` : label;
+//   const inputPlaceholder = placeholder ? placeholder : inputLabel;
+//   const [text, setText] = useState<string>(value ?? '');
+
+//   const [inputFocused, setInputFocused] = useState<boolean>(false);
+//   const [validationError, setValidationError] = useState<string | null>(null);
+
+//   const onValueChange = (text: string) => {
+//     if (onChangeText) {
+//       onChangeText(text);
+//     }
+//     setText(text);
+//   };
+
+//   const onFocus = () => {
+//     if (validationError !== null) {
+//       if (error != undefined) {
+//         error(false);
+//       }
+//       setValidationError(null);
+//     }
+//     setInputFocused(true);
+//   };
+
+//   const onBlur = () => {
+//     if (validationType != undefined) {
+//       const validated = fieldValidation(
+//         validationType,
+//         value ? value : text,
+//         validateValue,
+//       );
+//       if (validated) {
+//         if (error != undefined) {
+//           error(false);
+//         }
+//         setValidationError(null);
+//       } else {
+//         if (error != undefined) {
+//           error(true);
+//         }
+//         setValidationError(errorMessage(validationType, validateValue));
+//       }
+//     }
+//     setInputFocused(false);
+//   };
+
+//   return (
+//     <View style={styles.input_container}>
+//       <View
+//         style={[
+//           styles.input_box,
+//           multiline
+//             ? styles.container_multi_line
+//             : styles.container_single_line,
+//         ]}>
+//         <View style={styles.label_wrapper}>
+//           {value.length > 0 || inputFocused || placeholder ? (
+//             <Typography
+//               weight="regular"
+//               variant="description"
+//               style={{ color: Themes.shadow }}>
+//               {inputLabel}
+//             </Typography>
+//           ) : (
+//             <View style={styles.empty_label} />
+//           )}
+//         </View>
+//         <TextInput
+//           onChangeText={text => onValueChange(text)}
+//           value={value ? value : text}
+//           style={[
+//             styles.editable_area,
+//             multiline ? styles.multi_line_edit : styles.single_line_edit,
+//           ]}
+//           placeholder={
+//             value.length > 0 || inputFocused ? undefined : inputPlaceholder
+//           }
+//           multiline={multiline}
+//           accessibilityLabel={`Enter ${placeholder}`}
+//           selectionColor={Themes.green_100}
+//           onFocus={onFocus}
+//           placeholderTextColor={Themes.shadow}
+//           onBlur={onBlur}
+//           maxLength={maxLength}
+//           autoCorrect={false}
+//           spellCheck={false}
+//           keyboardType={keyboardType}
+//           autoCapitalize={autoCapitalize}
+//           editable={editable}
+//         />
+//       </View>
+//       <View style={styles.label_wrapper}>
+//         {validationError && (
+//           <Typography
+//             variant="description"
+//             weight="regular"
+//             style={{ color: Themes.lantern_coral_90 }}>
+//             {validationError}
+//           </Typography>
+//         )}
+//       </View>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   editable_area: {
+//     flex: 1,
+//     borderBottomEndRadius: 3,
+//     textAlignVertical: 'top',
+//     textAlign: 'left',
+//     margin: 0,
+//     padding: 0,
+//     marginTop: Platform.OS === 'ios' ? -15 : -3,
+//     fontFamily: 'DMSans-Regular',
+//     color: '#000',
+//   },
+//   single_line_edit: {
+//     //*total height=50, top area=20, bottom area=8
+//     height: 22,
+//   },
+//   multi_line_edit: {
+//     //* contains 8 rows in default if exceeds will be scroll inside
+//     height: 200,
+//   },
+//   label_wrapper: {
+//     paddingVertical: 2,
+//     maxWidth: screenWidth - 60,
+//   },
+//   empty_label: {
+//     height: 12,
+//   },
+//   input_box: {
+//     flex: 1,
+//     width: '100%',
+//     paddingHorizontal: 10,
+//     borderRadius: 5,
+//     backgroundColor: Themes.white,
+//   },
+//   container_single_line: {
+//     height: 50,
+//   },
+//   container_multi_line: {
+//     height: 228,
+//   },
+//   input_container: {
+//     display: 'flex',
+//     width: '100%',
+//     alignSelf: 'center',
+//     marginBottom: 8,
+//     maxWidth: screenWidth - 60, //*as per design perspective
+//   },
+// });
+
+// export { InputValidationType } from '../../utils/Validators';
+// export default InputField;

@@ -1,0 +1,121 @@
+// import React, { FC } from 'react';
+// import {
+//   Dimensions,
+//   DimensionValue,
+//   Image,
+//   ImageSourcePropType,
+//   StyleSheet,
+//   TouchableOpacity,
+//   View,
+// } from 'react-native';
+
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+// import Themes from '../../asset/themes/Themes';
+// import Typography from './Typography';
+
+// interface IconButtonProps {
+//   title: string;
+//   onPress: () => void;
+//   icon: ImageSourcePropType | string;
+//   secondary?: boolean;
+//   disabled?: boolean;
+//   alignCenter?: boolean;
+//   enableBoldText?: boolean;
+//   customWidth?: DimensionValue;
+// }
+
+// const screenWidth = Dimensions.get('window').width;
+
+// const IconButton: FC<IconButtonProps> = ({
+//   title,
+//   onPress,
+//   secondary = false,
+//   icon,
+//   disabled = false,
+//   alignCenter = false,
+//   enableBoldText = true,
+//   customWidth,
+// }) => {
+//   return (
+//     <TouchableOpacity
+//       style={[
+//         Styles.button_container,
+//         alignCenter ? Styles.center_button : Styles.left_button,
+//         disabled ? Styles.disabled_button : null,
+//         secondary || disabled ? null : Styles.colored_button,
+//         customWidth
+//           ? { maxWidth: customWidth }
+//           : { maxWidth: screenWidth - 90 },
+//       ]}
+//       disabled={disabled}
+//       accessibilityLabel={`${title} Button`}
+//       onPress={onPress}>
+//       <View style={Styles.inner_wrapper}>
+//         <View style={Styles.icon_wrapper}>
+//           {typeof icon == 'string' ? (
+//             <Ionicons name={icon} size={20} color={Themes.white} />
+//           ) : (
+//             <Image source={icon} style={Styles.icon} />
+//           )}
+//         </View>
+//         <Typography
+//           variant="body1"
+//           weight="medium"
+//           fontFamily={enableBoldText ? 'Poppins-Bold' : 'Poppins-Regular'}
+//           style={[
+//             { color: secondary ? Themes.green_60 : Themes.white },
+//             Styles.button_text,
+//           ]}
+//           numberOfLines={1}
+//           ellipsizeMode={'tail'}>
+//           {title}
+//         </Typography>
+//       </View>
+//     </TouchableOpacity>
+//   );
+// };
+
+// const Styles = StyleSheet.create({
+//   button_container: {
+//     justifyContent: 'center',
+//     alignSelf: 'center',
+//     borderRadius: 25,
+//     borderWidth: 2,
+//     borderColor: Themes.green_70,
+//     width: '100%',
+//     height: 40,
+//     paddingHorizontal: 25,
+//   },
+//   colored_button: {
+//     backgroundColor: Themes.green_70,
+//     borderColor: Themes.green_70,
+//   },
+//   disabled_button: {
+//     backgroundColor: Themes.grey,
+//     borderColor: Themes.grey,
+//   },
+//   center_button: {
+//     alignItems: 'center',
+//   },
+//   left_button: {
+//     alignItems: 'flex-start',
+//   },
+//   inner_wrapper: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   icon_wrapper: {
+//     paddingRight: 15,
+//   },
+//   icon: {
+//     width: 19,
+//     tintColor: Themes.white,
+//   },
+//   button_text: {
+//     textTransform: 'capitalize',
+//   },
+// });
+
+// export default IconButton;

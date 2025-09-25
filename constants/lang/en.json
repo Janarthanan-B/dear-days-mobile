@@ -1,6 +1,18 @@
 {
   "Common": {
     "deadDays": "DearDays",
-    "dearDaysSplashInfo": "Every day deserves a \n dear place."
+    "dearDaysSplashInfo": "Every day deserves a \n dear place.",
+    "welcome": "Welcome to Dear Days",
+    "welcomeNote": "For couples who want to treasure their journey, one memory at a time."
+  },
+  "Navigation": {
+    "continue": "Continue",
+    "next": "Next"
+  },
+  "OnBoard": {
+    "aboutYou": "Tell us about You!",
+    "yourName": "Your name",
+    "yourPartnerName": "Your partner's name",
+    "whenTogether": "When did you get together?"
   }
 }

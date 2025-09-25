@@ -1,6 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from "react";
-
-import { StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Colors } from "../constants/theme";
 
 type ThemeName = "light" | "dark";
@@ -8,24 +7,44 @@ type Theme = typeof Colors.light;
 
 type ThemeContextType = {
   themeName: ThemeName;
-  theme: typeof Colors.light;
+  theme: Theme;
   toggleTheme: () => void;
 };
 
-// ✅ Safe default values to satisfy TypeScript
-const defaultValue: ThemeContextType = {
+const ThemeContext = createContext<ThemeContextType>({
   themeName: "light",
   theme: Colors.light,
   toggleTheme: () => {},
-};
+});
 
-const ThemeContext = createContext<ThemeContextType>(defaultValue);
+const THEME_KEY = "APP_THEME";
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [themeName, setThemeName] = useState<ThemeName>("light");
 
-  const toggleTheme = () => {
-    setThemeName((prev) => (prev === "light" ? "dark" : "light"));
+  // 🔁 Load saved theme from AsyncStorage
+  useEffect(() => {
+    (async () => {
+      try {
+        const storedTheme = await AsyncStorage.getItem(THEME_KEY);
+        if (storedTheme === "dark" || storedTheme === "light") {
+          setThemeName(storedTheme);
+        }
+      } catch (e) {
+        console.log("Failed to load theme:", e);
+      }
+    })();
+  }, []);
+
+  // 💾 Save theme to AsyncStorage
+  const toggleTheme = async () => {
+    const newTheme = themeName === "light" ? "dark" : "light";
+    try {
+      await AsyncStorage.setItem(THEME_KEY, newTheme);
+    } catch (e) {
+      console.log("Failed to save theme:", e);
+    }
+    setThemeName(newTheme);
   };
 
   const theme = Colors[themeName];
@@ -38,10 +57,3 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useTheme = () => useContext(ThemeContext);
-
-export function useThemedStyles<
-  T extends StyleSheet.NamedStyles<T> | StyleSheet.NamedStyles<any>
->(stylesFn: (theme: Theme) => T): T {
-  const { theme } = useTheme();
-  return stylesFn(theme);
-}

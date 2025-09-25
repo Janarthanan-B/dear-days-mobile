@@ -1,20 +1,24 @@
 // App.js
-import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
 import text from "@/constants/text";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
+import { Colors, ThemeName } from "@/constants/theme";
+import { useTheme } from "@/hooks/ThemeContext";
+import { StackActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootNavigatorParamsList } from "../index";
-import { useTheme, useThemedStyles } from "@/hooks/ThemeContext";
-import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 const { width, height } = Dimensions.get("screen");
 
 type Props = NativeStackScreenProps<RootNavigatorParamsList, "splash">;
 
 const SplashScreen: React.FC<Props> = ({ navigation }) => {
+  const { themeName, theme } = useTheme();
+  const styles = createStyles(themeName);
+
   const [showImage, setShowImage] = useState(false);
   const [showExpandedD, setShowExpandedD] = useState(false);
   const [showInitialDD, setShowInitialDD] = useState(true);
@@ -34,7 +38,6 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
   const aysAnimations = useRef(
     aysLetters.map(() => new Animated.Value(0))
   ).current;
-  const { toggleTheme, themeName, theme } = useTheme();
 
   useEffect(() => {
     // Step 0: Circular Reveal Animation (scale up white circle)
@@ -83,7 +86,7 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
             }).start(() => {
               setShowImage(true);
               setTimeout(() => {
-                navigation.navigate("onBoard");
+                navigation.dispatch(StackActions.replace("welcome"));
               }, 1500);
             });
           });
@@ -205,8 +208,9 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
     </SafeAreaProvider>
   );
 };
-const styles = useThemedStyles((theme) =>
-  StyleSheet.create({
+const createStyles = (themeName: ThemeName) => {
+  const theme = Colors[themeName];
+  return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.backgroundSplash,
@@ -253,7 +257,7 @@ const styles = useThemedStyles((theme) =>
       letterSpacing: 0,
       paddingTop: 24,
     },
-  })
-);
+  });
+};
 
 export default SplashScreen;

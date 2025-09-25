@@ -1,0 +1,158 @@
+// import React, { useEffect, useRef, useState } from 'react';
+// import { NativeModules, Platform } from 'react-native';
+// import DeviceInfo from 'react-native-device-info';
+// import {
+//   GooglePlacesAutocomplete,
+//   GooglePlacesAutocompleteRef,
+// } from 'react-native-google-places-autocomplete';
+// import { TextInput } from 'react-native-paper';
+// import config from '../../../config';
+// import Themes from '../../asset/themes/Themes';
+// import { PLATFORM_TYPE } from '../../constants/constants';
+// import { useAppDispatch } from '../../hooks/useAppDispatch';
+// import { trackEvent } from '../../redux/actions/TrackEventAction';
+
+// import text, { getLanguage } from '../../text';
+// import Typography from './Typography';
+
+// const lang = getLanguage();
+
+// interface PlacesAutoCompleteProps {
+//   setLocationData: (data: object) => void;
+//   locationSearchText: string;
+//   setLocationSearchText: (data: string) => void;
+//   editable?: boolean;
+// }
+
+// const PlacesAutoComplete: React.FC<PlacesAutoCompleteProps> = ({
+//   setLocationData,
+//   locationSearchText,
+//   setLocationSearchText,
+//   editable = true,
+// }) => {
+//   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+//   const [fingerPrintKey, setfingerPrintKey] = useState<string>('');
+//   const autocompleteRef = useRef<GooglePlacesAutocompleteRef>(null);
+
+//   const dispatch = useAppDispatch();
+
+//   useEffect(() => {
+//     const { SurgeryPlusModule } = NativeModules;
+//     if (Platform.OS === PLATFORM_TYPE.ANDROID) {
+//       SurgeryPlusModule.getDebugKeystoreSHA1()
+//         .then((fingerPrint: any) => {
+//           setfingerPrintKey(fingerPrint);
+//         })
+//         .catch((error: any) => {
+//           console.error('Error:', error);
+//         });
+//     }
+//   }, []);
+
+//   const setData = (data: object) => {
+//     setLocationData(data);
+//   };
+
+//   return (
+//     <GooglePlacesAutocomplete
+//       fetchDetails={true}
+//       ref={autocompleteRef}
+//       placeholder=""
+//       onPress={(data, details = null) => {
+//         setLocationSearchText(data.description);
+//         details?.geometry.location && setData(details?.geometry.location);
+//       }}
+//       query={{
+//         key: Platform.select({
+//           android: config.google.androidPlacesKey,
+//           ios: config.google.iPhonePlacesKey,
+//         }),
+//         language: lang,
+//       }}
+//       requestUrl={{
+//         useOnPlatform: 'all',
+//         url: 'https://maps.googleapis.com/maps/api',
+//         headers: {
+//           'X-Ios-Bundle-Identifier': DeviceInfo.getBundleId(),
+//           'X-Android-Package': DeviceInfo.getBundleId(),
+//           'X-Android-Cert': fingerPrintKey,
+//         },
+//       }}
+//       onFail={err => {
+//         dispatch(
+//           trackEvent({
+//             name: 'places_autocomplete_error',
+//             properties: {
+//               error: err,
+//             },
+//           }),
+//         );
+//       }}
+//       textInputProps={{
+//         InputComp: TextInput,
+//         cursorColor: Themes.green_100,
+//         editable: editable,
+//         selectionColor: Themes.green_100,
+//         underlineColor: 'transparent',
+//         activeUnderlineColor: 'transparent',
+//         fontFamily: 'DMSans-Regular',
+//         label: (
+//           <Typography
+//             style={{ color: Themes.medium_gray, fontFamily: 'DMSans-Regular' }}>
+//             {text.common.enterLocation}
+//           </Typography>
+//         ),
+//         right: !isEditMode ? (
+//           <TextInput.Icon
+//             icon={'magnify'}
+//             size={28}
+//             color={Themes.medium_gray}
+//           />
+//         ) : (
+//           <TextInput.Icon
+//             onPress={() => {
+//               autocompleteRef?.current?.setAddressText('');
+//               setLocationSearchText('');
+//               setData({});
+//             }}
+//             icon={'close'}
+//             size={28}
+//             color={Themes.medium_gray}
+//           />
+//         ),
+//         onChangeText: text => {
+//           if (isEditMode) {
+//             setLocationSearchText(text);
+//           }
+//         },
+//         clearButtonMode: 'never',
+//         value: locationSearchText,
+//         style: {
+//           width: '100%',
+//           backgroundColor: editable ? Themes.white : Themes.brown_10,
+//           borderRadius: 4,
+//           borderBottomWidth: 0,
+//           flex: 1,
+//         },
+//         textColor: Themes.green_100,
+//         onFocus: () => {
+//           setIsEditMode(true);
+//           setLocationSearchText('');
+//         },
+//         onBlur: () => {
+//           setIsEditMode(false);
+//         },
+//       }}
+//       styles={{
+//         separator: {
+//           height: 0,
+//           backgroundColor: 'transparent',
+//         },
+//       }}
+//       enablePoweredByContainer={false}
+//       disableScroll={true}
+//     />
+//   );
+// };
+
+// export default PlacesAutoComplete;

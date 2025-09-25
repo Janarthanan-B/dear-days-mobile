@@ -1,0 +1,120 @@
+// import React, { useState } from 'react';
+// import {
+//   Dimensions,
+//   SafeAreaView,
+//   StyleSheet,
+//   TouchableOpacity,
+//   View,
+// } from 'react-native';
+
+// import { useTheme } from '@/hooks/ThemeContext';
+
+// interface ToggleTabsProps {
+//   leftHeader: string;
+//   leftCount?: number;
+//   rightHeader: string;
+//   rightCount?: number;
+//   leftSelected: (x: boolean) => void;
+// }
+
+// const ToggleTabs: React.FC<ToggleTabsProps> = ({
+//   leftHeader,
+//   rightHeader,
+//   leftCount,
+//   rightCount,
+//   leftSelected,
+// }) => {
+//   const [leftFocused, setLeftFocused] = useState<boolean>(true);
+//   const { toggleTheme, themeName, theme } = useTheme();
+
+//   const onTabSelect = (value: boolean) => {
+//     leftSelected(value);
+//     setLeftFocused(value);
+//   };
+
+//   return (
+//     <SafeAreaView style={Styles.container}>
+//       <TouchableOpacity
+//         accessibilityLabel={`${leftHeader} tab`}
+//         style={[Styles.tab_wrapper, leftFocused && Styles.selected_tab]}
+//         onPress={() => onTabSelect(true)}>
+//         <Typography
+//           variant={'paragraph1'}
+//           weight={leftFocused ? 'medium' : 'light'}
+//           style={{ color: Themes.black }}>
+//           {leftHeader}
+//         </Typography>
+//         {leftCount && leftCount != 0 ? (
+//           <View style={Styles.badge_icon}>
+//             <Typography
+//               weight="bold"
+//               variant="description"
+//               style={Styles.leftCount}>
+//               {leftCount.toString()}
+//             </Typography>
+//           </View>
+//         ) : null}
+//       </TouchableOpacity>
+//       <TouchableOpacity
+//         accessibilityLabel={`${rightHeader} button`}
+//         style={[Styles.tab_wrapper, !leftFocused && Styles.selected_tab]}
+//         onPress={() => onTabSelect(false)}>
+//         <Typography
+//           variant="paragraph1"
+//           weight={!leftFocused ? 'medium' : 'light'}
+//           style={{ color: Themes.black }}>
+//           {rightHeader}
+//         </Typography>
+//         {rightCount ? (
+//           <View style={Styles.badge_icon}>
+//             <Typography
+//               variant="description"
+//               weight="bold"
+//               adjustsFontSizeToFit={true}
+//               style={{ color: Themes.white }}>
+//               {rightCount.toString()}
+//             </Typography>
+//           </View>
+//         ) : null}
+//       </TouchableOpacity>
+//     </SafeAreaView>
+//   );
+// };
+
+// const Styles = StyleSheet.create({
+//   container: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     height: 60,
+//     width: Dimensions.get('window').width,
+//     paddingHorizontal: 37,
+//     backgroundColor: Themes.white,
+//     borderBottomWidth: 1,
+//     borderColor: Themes.green_30,
+//   },
+//   tab_wrapper: {
+//     flex: 1,
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     height: '100%',
+//     borderBottomWidth: 5,
+//     borderBottomColor: Themes.white,
+//   },
+//   selected_tab: {
+//     borderBottomColor: Themes.green_100,
+//     marginBottom: -1,
+//   },
+//   badge_icon: {
+//     width: 24,
+//     height: 24,
+//     borderRadius: 24 / 2,
+//     marginLeft: 5,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     backgroundColor: Themes.green_100,
+//   },
+//   leftCount: { fontWeight: 'bold', color: Themes.white },
+// });
+
+// export default ToggleTabs;

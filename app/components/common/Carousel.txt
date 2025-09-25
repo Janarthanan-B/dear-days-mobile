@@ -1,0 +1,150 @@
+// import React, { ReactNode, useRef } from 'react';
+// import {
+//   Animated,
+//   Image,
+//   ImageSourcePropType,
+//   ScrollView,
+//   StyleSheet,
+//   useWindowDimensions,
+//   View,
+// } from 'react-native';
+
+// import useScreenSizeStyles from '../../../hooks/useScreenSizeStyles';
+// import Typography from './Typography';
+
+// interface Item {
+//   title: string;
+//   body: ReactNode;
+//   image?: ImageSourcePropType;
+// }
+
+// interface Props {
+//   data: Item[];
+// }
+
+// const Carousel: React.FC<Props> = ({ data }) => {
+//   const styles = useScreenSizeStyles({ largeStyles, smallStyles });
+//   const scrollX = useRef(new Animated.Value(0)).current;
+//   const scrollRef = useRef<ScrollView>(null);
+
+//   const { width: windowWidth } = useWindowDimensions();
+
+//   return (
+//     <>
+//       <ScrollView
+//         horizontal={true}
+//         pagingEnabled
+//         showsHorizontalScrollIndicator={false}
+//         ref={scrollRef}
+//         onScroll={Animated.event(
+//           [
+//             {
+//               nativeEvent: {
+//                 contentOffset: {
+//                   x: scrollX,
+//                 },
+//               },
+//             },
+//           ],
+//           { useNativeDriver: false },
+//         )}
+//         scrollEventThrottle={1}>
+//         {data.map((item, index) => {
+//           return (
+//             <View
+//               style={[{ width: windowWidth }, styles.slide_container]}
+//               key={index}>
+//               {item.image ? (
+//                 <View style={styles.image_slide_container}>
+//                   {/* TODO: the image in figma spans the whole width of the screen */}
+//                   <Image
+//                     source={item.image}
+//                     style={styles.image}
+//                     resizeMode="contain"
+//                   />
+//                 </View>
+//               ) : null}
+//               <Typography
+//                 variant="large2"
+//                 weight="light"
+//                 style={largeStyles.slide_header_container}>
+//                 {item.title}
+//               </Typography>
+//               <Typography
+//                 variant="body1"
+//                 weight="medium"
+//                 style={{ textAlign: 'center' }}>
+//                 {item.body}
+//               </Typography>
+//             </View>
+//           );
+//         })}
+//       </ScrollView>
+//       <View style={styles.indicator_container}>
+//         {data.map((image, imageIndex) => {
+//           const backgroundColor = scrollX.interpolate({
+//             inputRange: [
+//               windowWidth * (imageIndex - 1),
+//               windowWidth * imageIndex,
+//               windowWidth * (imageIndex + 1),
+//             ],
+//             outputRange: [Themes.transparent, Themes.white, Themes.transparent],
+//             extrapolate: 'clamp',
+//           });
+//           return (
+//             <Animated.View
+//               key={imageIndex}
+//               style={[styles.normalDot, { backgroundColor }]}
+//             />
+//           );
+//         })}
+//       </View>
+//     </>
+//   );
+// };
+
+// const largeStyles = StyleSheet.create({
+//   normalDot: {
+//     height: 10,
+//     width: 10,
+//     borderRadius: 5,
+//     marginHorizontal: 4,
+//     borderWidth: 1,
+//     borderColor: Themes.white,
+//   },
+//   slide_container: {
+//     marginTop: 10,
+//     marginBottom: 18,
+//     paddingHorizontal: 40,
+//     alignItems: 'center',
+//   },
+//   image_slide_container: {
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     height: 198,
+//   },
+//   image: {
+//     flex: 1,
+//   },
+//   slide_header_container: {
+//     textAlign: 'center',
+//     alignItems: 'center',
+//     marginBottom: 10,
+//     textTransform: 'capitalize',
+//     color: Themes.white,
+//   },
+//   indicator_container: {
+//     marginBottom: 40,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
+
+// const smallStyles = StyleSheet.create({
+//   slide_container: {
+//     marginTop: 20,
+//   },
+// });
+
+// export default Carousel;

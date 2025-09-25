@@ -23,7 +23,7 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
   const [date, setDate] = useState("");
 
   const onButtonClick = () => {
-    navigation.dispatch(StackActions.replace("onBoard"));
+    navigation.dispatch(StackActions.replace("register"));
   };
   return (
     <SafeAreaProvider>

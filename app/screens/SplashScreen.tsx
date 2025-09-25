@@ -253,7 +253,7 @@ const createStyles = (themeName: ThemeName) => {
       fontSize: 24,
       color: theme.textInfo,
       textAlign: "center",
-      fontFamily: "Roboto_300Light",
+      fontFamily: "Roboto_500Medium",
       letterSpacing: 0,
       paddingTop: 24,
     },

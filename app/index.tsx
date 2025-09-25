@@ -15,6 +15,7 @@ import { ActivityIndicator, Text, View } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import MemoryScreen from "./screens/MemoryScreen";
 import OnBoardScreen from "./screens/OnBoardScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import SplashScreen from "./screens/SplashScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 
@@ -22,6 +23,7 @@ export type RootNavigatorParamsList = {
   splash: undefined;
   welcome: undefined;
   onBoard: undefined;
+  register: undefined;
   home: undefined;
   memory: undefined;
   todo: undefined;
@@ -54,6 +56,7 @@ export default function Index() {
         <RootStack.Screen name="splash" component={SplashScreen} />
         <RootStack.Screen name="welcome" component={WelcomeScreen} />
         <RootStack.Screen name="onBoard" component={OnBoardScreen} />
+        <RootStack.Screen name="register" component={RegisterScreen} />
         <RootStack.Screen name="home" component={HomeScreen} />
         <RootStack.Screen name="memory" component={MemoryScreen} />
       </RootStack.Navigator>

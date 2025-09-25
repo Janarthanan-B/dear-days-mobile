@@ -14,5 +14,11 @@
     "yourName": "Your name",
     "yourPartnerName": "Your partner's name",
     "whenTogether": "When did you get together?"
+  },
+  "Register": {
+    "almostDone": "Almost done!",
+    "registerInfo": "Sign up simply with your Google account and start saving memories.",
+    "signUp": "Sign up with Google",
+    "continue": "Continue as a guest"
   }
 }

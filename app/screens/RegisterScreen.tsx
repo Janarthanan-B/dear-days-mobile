@@ -25,11 +25,11 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const styles = createStyles(themeName);
 
   const onSgnUpClick = () => {
-    navigation.dispatch(StackActions.replace("home"));
+    navigation.dispatch(StackActions.replace("main"));
   };
 
   const onGuestClick = () => {
-    navigation.dispatch(StackActions.replace("home"));
+    navigation.dispatch(StackActions.replace("main"));
   };
 
   return (

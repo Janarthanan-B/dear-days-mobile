@@ -6,7 +6,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-export default function MemoryScreen({ navigation }: any) {
+export default function MomentsScreen({ navigation }: any) {
   const progress = useDrawerProgress();
 
   const animatedStyle = useAnimatedStyle(() => {

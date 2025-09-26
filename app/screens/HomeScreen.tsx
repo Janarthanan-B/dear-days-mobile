@@ -1,22 +1,19 @@
 // screens/DashboardScreen.js
+import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
   StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Entypo, Ionicons } from "@expo/vector-icons";
 import AddImageModal from "../components/AddImageModel";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootNavigatorParamsList } from "../index";
 import ScreenMenuModal from "../components/ScreenModel";
-import { MenuProvider } from "react-native-popup-menu";
-import ScreenModel from "../components/ScreenModel";
+import { MainNavigatorParamsList } from "../index";
 
-type HomeProps = NativeStackScreenProps<RootNavigatorParamsList, "home">;
+type HomeProps = NativeStackScreenProps<MainNavigatorParamsList, "home">;
 
 const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
   const [addImageVisible, setAddImageVisible] = useState(false);

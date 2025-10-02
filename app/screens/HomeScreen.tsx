@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import AddImageModal from "../components/AddImageModel";
 import ScreenMenuModal from "../components/ScreenModel";
 import { MainNavigatorParamsList } from "../index";
 
@@ -37,12 +36,6 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
       >
         <Ionicons name="heart" size={36} color="white" />
       </TouchableOpacity>
-
-      {/* Modals */}
-      <AddImageModal
-        visible={addImageVisible}
-        onClose={() => setAddImageVisible(false)}
-      />
     </View>
   );
 };

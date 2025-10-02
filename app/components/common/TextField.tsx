@@ -21,6 +21,7 @@ interface CustomTextFieldProps {
     | "numeric"
     | "phone-pad"
     | "number-pad";
+  multiline?: boolean;
 }
 const screenWidth = Dimensions.get("window").width;
 
@@ -32,16 +33,17 @@ const PrimaryTextField: React.FC<CustomTextFieldProps> = ({
   errorMessage,
   enableErrors = true,
   showCharCounter = false,
-  maxLength = 50,
   secureTextEntry = false,
   keyboardType = "default",
+  multiline = false,
+  maxLength = multiline ? 500 : 50,
 }) => {
   const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
   return (
     <TextField
       style={styles.input}
-      containerStyle={styles.container}
+      containerStyle={[styles.container, { maxHeight: multiline ? 150 : 60 }]}
       label={placeholder}
       labelColor={theme.textPrimary}
       labelStyle={styles.label}
@@ -56,8 +58,9 @@ const PrimaryTextField: React.FC<CustomTextFieldProps> = ({
       maxLength={maxLength}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
-      fieldStyle={styles.fieldStyle}
+      fieldStyle={[styles.fieldStyle, { height: multiline ? 126 : 36 }]}
       selectionColor={theme.textSecondary}
+      multiline={multiline}
     />
   );
 };
@@ -68,7 +71,7 @@ const createStyles = (themeName: ThemeName) => {
   return StyleSheet.create({
     container: {
       width: "100%",
-      maxHeight: 60,
+
       maxWidth: screenWidth - 90,
     },
     input: {
@@ -88,7 +91,6 @@ const createStyles = (themeName: ThemeName) => {
       borderWidth: 1,
       borderColor: theme.borderPrimary,
       borderRadius: 12,
-      height: 36,
       paddingHorizontal: 8,
     },
   });

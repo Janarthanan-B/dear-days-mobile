@@ -22,7 +22,7 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import MiniDrawerContent from "./components/MiniDrawerContent";
+import MiniDrawerContent from "./components/templates/MiniDrawerContent";
 import MomentsScreen from "./screens/MomentsScreen";
 import SettingScreen from "./screens/SettingScreen";
 import TodoScreen from "./screens/TodoScreen";
@@ -65,7 +65,7 @@ export default function Index() {
     <ThemeProvider>
       <RootStack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="splash"
+        initialRouteName="main"
       >
         <RootStack.Screen name="splash" component={SplashScreen} />
         <RootStack.Screen name="welcome" component={WelcomeScreen} />

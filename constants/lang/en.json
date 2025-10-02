@@ -7,7 +7,9 @@
   },
   "Navigation": {
     "continue": "Continue",
-    "next": "Next"
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "OnBoard": {
     "aboutYou": "Tell us about You!",
@@ -20,5 +22,14 @@
     "registerInfo": "Sign up simply with your Google account and start saving memories.",
     "signUp": "Sign up with Google",
     "continue": "Continue as a guest"
+  },
+  "Moment": {
+    "title": "Moments",
+    "description": "Describe as you like",
+    "date": "Date",
+    "addPhotos": "Add Photos",
+    "addNew": "Add new moment",
+    "moments": "Moments",
+    "noMoment": "Hey, go ahead and drop your memories here!"
   }
 }

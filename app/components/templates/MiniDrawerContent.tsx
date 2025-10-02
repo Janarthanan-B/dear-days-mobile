@@ -1,3 +1,5 @@
+import { Colors, ThemeName } from "@/constants/theme";
+import { useTheme } from "@/hooks/ThemeContext";
 import { useDrawerProgress } from "@react-navigation/drawer";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import React from "react";
@@ -8,10 +10,22 @@ import Animated, {
 } from "react-native-reanimated";
 
 const items = [
-  { icon: require("../../assets/icon/milestone_icon.png"), screen: "home" },
-  { icon: require("../../assets/icon/moments_icon.png"), screen: "moments" },
-  { icon: require("../../assets/icon/calendar_icon.png"), screen: "todo" },
-  { icon: require("../../assets/icon/setting_icon.png"), screen: "settings" },
+  {
+    icon: require("../../../assets/icon/milestone_icon.png"),
+    screen: "home",
+  },
+  {
+    icon: require("../../../assets/icon/moments_icon.png"),
+    screen: "moments",
+  },
+  {
+    icon: require("../../../assets/icon/calendar_icon.png"),
+    screen: "todo",
+  },
+  {
+    icon: require("../../../assets/icon/setting_icon.png"),
+    screen: "settings",
+  },
 ];
 interface Props {
   navigation: NavigationProp<ParamListBase>;
@@ -19,6 +33,8 @@ interface Props {
 
 const MiniDrawerContent = ({ navigation }: any) => {
   const progress = useDrawerProgress();
+  const { themeName } = useTheme();
+  const styles = createStyles(themeName);
 
   return (
     <View style={styles.container}>
@@ -49,26 +65,28 @@ const MiniDrawerContent = ({ navigation }: any) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    paddingTop: 40,
-  },
-  iconWrapper: {
-    marginVertical: 20,
-  },
-  button: {
-    padding: 10,
-    borderRadius: 30,
-    elevation: 5,
-  },
-  icon: {
-    height: 24,
-    width: 24,
-  },
-});
+const createStyles = (themeName: ThemeName) => {
+  const theme = Colors[themeName];
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.backgroundSecoundary,
+      alignItems: "center",
+      paddingTop: 40,
+    },
+    iconWrapper: {
+      marginVertical: 20,
+    },
+    button: {
+      padding: 10,
+      borderRadius: 30,
+      elevation: 5,
+    },
+    icon: {
+      height: 24,
+      width: 24,
+    },
+  });
+};
 
 export default MiniDrawerContent;

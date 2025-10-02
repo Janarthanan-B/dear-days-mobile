@@ -28,9 +28,7 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
   return (
     <TouchableOpacity
       style={[
-        styles.button_container,
-        disabled ? styles.disabled_button : null,
-        secondary || disabled ? null : styles.colored_button,
+        secondary ? styles.sec_button_container : styles.button_container,
       ]}
       disabled={disabled}
       accessibilityLabel={`${title} Button`}
@@ -39,7 +37,7 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
       <View style={styles.inner_wrapper}>
         <Text
           style={[
-            { color: secondary ? theme.primary : theme.backgroundPrimary },
+            { color: secondary ? theme.textPrimary : theme.backgroundPrimary },
             styles.button_text,
           ]}
           numberOfLines={1}
@@ -62,14 +60,23 @@ const createStyles = (themeName: ThemeName) => {
       borderRadius: 25,
       borderWidth: 2,
       borderColor: theme.primary,
+      backgroundColor: theme.primary,
       height: 46,
       width: "100%",
       paddingHorizontal: 25,
       maxWidth: screenWidth - 90, //*as per design perspective
     },
-    colored_button: {
-      backgroundColor: theme.primary,
-      borderColor: theme.primary,
+    sec_button_container: {
+      justifyContent: "center",
+      alignSelf: "center",
+      alignItems: "center",
+      borderRadius: 25,
+      borderWidth: 2,
+      borderColor: theme.borderPrimary,
+      height: 46,
+      width: "100%",
+      paddingHorizontal: 25,
+      maxWidth: screenWidth - 90,
     },
     disabled_button: {
       backgroundColor: theme.disable,

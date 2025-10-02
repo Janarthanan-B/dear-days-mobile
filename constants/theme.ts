@@ -14,6 +14,8 @@ export const Colors = {
     borderPrimary: "#BABABA",
 
     disable: "#49454F",
+
+    overlay: "rgba(0,0,0,0.5)",
   },
   dark: {
     primary: "#B10667",
@@ -30,6 +32,8 @@ export const Colors = {
     borderPrimary: "#BABABA",
 
     disable: "#49454F",
+
+    overlay: "rgba(0,0,0,0.5)",
   },
 };
 

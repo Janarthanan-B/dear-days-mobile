@@ -1,30 +1,61 @@
-// App.js
+// App.js or App.tsx
+import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View, TouchableOpacity, StyleSheet, Pressable } from "react-native";
-import { MaterialIcons, Feather, FontAwesome } from "@expo/vector-icons";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSpring,
   withTiming,
-  withSequence,
 } from "react-native-reanimated";
+
+const iconList: any[] = [
+  { name: "edit", Component: Feather },
+  { name: "trash", Component: Feather },
+  { name: "share", Component: Feather },
+  { name: "info", Component: Feather },
+];
 
 export default function ScreenModel() {
   const [visible, setVisible] = useState(false);
-  const menuOpacity = useSharedValue(0);
-  const menuTranslateY = useSharedValue(-10);
+
+  const containerOpacity = useSharedValue(0);
+  const containerTranslateY = useSharedValue(-10);
+  const iconAnimations = iconList.map(() => ({
+    opacity: useSharedValue(0),
+    translateY: useSharedValue(-10),
+    scale: useSharedValue(1),
+  }));
 
   const toggleMenu = () => {
     const show = !visible;
     setVisible(show);
 
-    menuOpacity.value = withTiming(show ? 1 : 0, { duration: 400 });
-    menuTranslateY.value = withTiming(show ? 0 : -10, { duration: 400 });
+    // Animate container
+    containerOpacity.value = withTiming(show ? 1 : 0, { duration: 300 });
+    containerTranslateY.value = withTiming(show ? 0 : -10, { duration: 300 });
+
+    // Animate icons
+    iconAnimations.forEach((anim, index) => {
+      const delay = index * 100;
+
+      if (show) {
+        anim.opacity.value = withDelay(delay, withTiming(1, { duration: 300 }));
+        anim.translateY.value = withDelay(
+          delay,
+          withSpring(0, { damping: 10 })
+        );
+      } else {
+        anim.opacity.value = withTiming(0, { duration: 200 });
+        anim.translateY.value = withTiming(-10, { duration: 200 });
+      }
+    });
   };
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: menuOpacity.value,
-    transform: [{ translateY: menuTranslateY.value }],
+  const containerStyle = useAnimatedStyle(() => ({
+    opacity: containerOpacity.value,
+    transform: [{ translateY: containerTranslateY.value }],
     pointerEvents: visible ? "auto" : "none",
   }));
 
@@ -38,27 +69,43 @@ export default function ScreenModel() {
       </View>
 
       {/* Icon Menu */}
-      <Animated.View style={[styles.menuContainer, animatedStyle]}>
-        {iconList.map((icon, index) => (
-          <Pressable
-            key={index}
-            style={styles.iconButton}
-            onPress={() => console.log(`Pressed ${icon.name}`)}
-          >
-            <icon.Component name={icon.name} size={24} color="#ED088A" />
-          </Pressable>
-        ))}
+      <Animated.View style={[styles.menuContainer, containerStyle]}>
+        {iconList.map((icon, index) => {
+          const anim = iconAnimations[index];
+
+          const animatedIconStyle = useAnimatedStyle(() => ({
+            opacity: anim.opacity.value,
+            transform: [
+              { translateY: anim.translateY.value },
+              { scale: anim.scale.value },
+            ],
+          }));
+
+          const handlePressIn = () => {
+            anim.scale.value = withTiming(0.9, { duration: 100 });
+          };
+
+          const handlePressOut = () => {
+            anim.scale.value = withTiming(1, { duration: 100 });
+          };
+
+          return (
+            <Animated.View key={index} style={animatedIconStyle}>
+              <Pressable
+                style={styles.iconButton}
+                onPress={() => console.log(`Pressed ${icon.name}`)}
+                onPressIn={handlePressIn}
+                onPressOut={handlePressOut}
+              >
+                <icon.Component name={icon.name} size={24} color="#ED088A" />
+              </Pressable>
+            </Animated.View>
+          );
+        })}
       </Animated.View>
     </>
   );
 }
-
-const iconList: any[] = [
-  { name: "edit", Component: Feather },
-  { name: "trash", Component: Feather },
-  { name: "share", Component: Feather },
-  { name: "info", Component: Feather },
-];
 
 const styles = StyleSheet.create({
   container: {
@@ -78,10 +125,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 12,
     paddingVertical: 8,
-    paddingHorizontal: 0,
     gap: 10,
     zIndex: 9,
-    backdropFilter: "blur(10px)", // optional, will only work on Web or iOS with blur enabled
+    paddingHorizontal: 4,
+    overflow: "hidden",
   },
   iconButton: {
     padding: 10,

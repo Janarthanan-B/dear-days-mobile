@@ -30,6 +30,9 @@
     "addPhotos": "Add Photos",
     "addNew": "Add new moment",
     "moments": "Moments",
-    "noMoment": "Hey, go ahead and drop your memories here!"
+    "bucketList": "Bucket List",
+    "noMoment": "Hey, go ahead and drop your memories here!",
+    "noTodo": "Hey, share some fun ideas to do together!",
+    "addNewTodo": "Add new Bucket List"
   }
 }

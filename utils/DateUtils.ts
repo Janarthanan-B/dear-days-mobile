@@ -5,7 +5,7 @@ export const groupTodos = (todos: Todo[]): TodoGroup[] => {
   const currentYear = new Date().getFullYear();
 
   const monthMap: Record<string, Todo[]> = {};
-  const pastYears: Todo[] = [];
+  const pastYearMap: Record<number, Todo[]> = {};
 
   todos.forEach((todo) => {
     const date = new Date(todo.createdAt);
@@ -16,11 +16,12 @@ export const groupTodos = (todos: Todo[]): TodoGroup[] => {
       if (!monthMap[month]) monthMap[month] = [];
       monthMap[month].push(todo);
     } else {
-      pastYears.push(todo);
+      if (!pastYearMap[year]) pastYearMap[year] = [];
+      pastYearMap[year].push(todo);
     }
   });
 
-  // Sort months: latest first
+  // Sort months (latest first)
   const monthNames = Object.keys(monthMap).sort(
     (a, b) =>
       new Date(`${b} 1, ${currentYear}`).getTime() -
@@ -35,15 +36,20 @@ export const groupTodos = (todos: Todo[]): TodoGroup[] => {
     ),
   }));
 
-  if (pastYears.length > 0) {
+  // Add past years (latest year first)
+  const pastYearsSorted = Object.keys(pastYearMap)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+  pastYearsSorted.forEach((year) => {
     groups.push({
-      title: "Past Years",
-      items: pastYears.sort(
+      title: year.toString(),
+      items: pastYearMap[year].sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       ),
     });
-  }
+  });
 
   return groups;
 };

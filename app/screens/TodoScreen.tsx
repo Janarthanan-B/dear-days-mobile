@@ -6,7 +6,7 @@ import { useTheme } from "@/hooks/ThemeContext";
 import { groupTodos } from "@/utils/DateUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Keyboard, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Checkbox, TextField } from "react-native-ui-lib";
 import ScreenTemplate from "../components/templates/ScreenTemplate";
 
@@ -17,6 +17,7 @@ const TodoScreen = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [value, setValue] = useState("");
   const [groups, setGroups] = useState<TodoGroup[]>([]);
+  const [editValues, setEditValues] = useState<{ [key: string]: string }>({});
 
   const STORAGE_KEY = "@todos";
 
@@ -49,30 +50,79 @@ const TodoScreen = () => {
     const newTodo: Todo = {
       id: Date.now().toString(),
       title: value.trim(),
-      createdAt: now.toISOString(),
+      createdAt: new Date(2000, 1, 13).toISOString(),
       completed: false,
     };
     const updatedTodos = [newTodo, ...todos];
-    setValue("");
     setTodos(updatedTodos);
     setGroups(groupTodos(updatedTodos));
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTodos));
 
-    Keyboard.dismiss();
+    // Clear input + edit cache
+    setValue("");
+    setEditValues({});
   };
 
-  const renderTodo = (todo: Todo) => (
-    <View key={todo.id} style={styles.todoItem}>
-      <Checkbox
-        value={todo.completed}
-        onValueChange={() => toggleTodo(todo.id)}
-        color={theme.textPrimary}
-      />
-      <Text style={[styles.todoText, todo.completed && styles.completedText]}>
-        {todo.title}
-      </Text>
-    </View>
-  );
+  const updateTodo = (todoId: string, newTitle: string) => {
+    const trimmed = newTitle.trim();
+
+    if (!trimmed) {
+      // If erased completely → remove the todo
+      const updatedTodos = todos.filter((t) => t.id !== todoId);
+      setTodos(updatedTodos);
+      setGroups(groupTodos(updatedTodos));
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTodos));
+      return;
+    }
+
+    // Otherwise → update title
+    const updatedTodos = todos.map((t) =>
+      t.id === todoId ? { ...t, title: trimmed } : t
+    );
+    setTodos(updatedTodos);
+    setGroups(groupTodos(updatedTodos));
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTodos));
+  };
+
+  // Update local text while typing
+  const handleEditChange = (todoId: string, text: string) => {
+    setEditValues((prev) => ({ ...prev, [todoId]: text }));
+  };
+
+  // Save on Enter / Blur
+  const handleEditSubmit = (todoId: string) => {
+    const text = editValues[todoId] ?? "";
+    updateTodo(todoId, text);
+    setEditValues((prev) => {
+      const copy = { ...prev };
+      delete copy[todoId]; // cleanup after save
+      return copy;
+    });
+  };
+
+  const renderTodo = (todo: Todo) => {
+    const currentValue = editValues[todo.id] ?? todo.title;
+
+    return (
+      <View key={todo.id} style={styles.todoItem}>
+        <Checkbox
+          value={todo.completed}
+          onValueChange={() => toggleTodo(todo.id)}
+          color={theme.textPrimary}
+        />
+        <TextField
+          value={currentValue}
+          onChangeText={(text) => handleEditChange(todo.id, text)}
+          onSubmitEditing={() => handleEditSubmit(todo.id)}
+          onEndEditing={() => handleEditSubmit(todo.id)}
+          style={[styles.todoText, todo.completed && styles.completedText]}
+          selectionColor={theme.textPrimary}
+          placeholder=""
+          validateOnBlur={true}
+        />
+      </View>
+    );
+  };
 
   return (
     <ScreenTemplate title={text.Moment.bucketList}>

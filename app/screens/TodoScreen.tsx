@@ -46,11 +46,10 @@ const TodoScreen = () => {
   // Add new todo to latest month
   const addTodo = () => {
     if (!value.trim()) return;
-    const now = new Date();
     const newTodo: Todo = {
       id: Date.now().toString(),
       title: value.trim(),
-      createdAt: new Date(2000, 1, 13).toISOString(),
+      createdAt: new Date().toISOString(),
       completed: false,
     };
     const updatedTodos = [newTodo, ...todos];

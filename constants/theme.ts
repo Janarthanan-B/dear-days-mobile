@@ -3,12 +3,13 @@ export const Colors = {
     primary: "#B10667",
 
     textPrimary: "#000000",
-    textSecondary: "#49454F",
+    textSecondary: "#5D5D5D",
     textWhite: "#FFFFFF",
     textInfo: "#938E8E",
 
     backgroundPrimary: "#FFFFFF",
     backgroundSecoundary: "#FFE9F6",
+    backgroundAlter: "#F2F2F2",
     backgroundSplash: "#FFD5ED",
 
     borderPrimary: "#BABABA",
@@ -21,12 +22,13 @@ export const Colors = {
     primary: "#B10667",
 
     textPrimary: "#000000",
-    textSecondary: "#49454F",
+    textSecondary: "#5D5D5D",
     textWhite: "#FFFFFF",
     textInfo: "#938E8E",
 
     backgroundPrimary: "#FFFFFF",
     backgroundSecoundary: "#FFE9F6",
+    backgroundAlter: "#F2F2F2",
     backgroundSplash: "#FFD5ED",
 
     borderPrimary: "#BABABA",

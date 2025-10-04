@@ -12,7 +12,7 @@ import {
 import { NavigatorScreenParams } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Platform, Text, View } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import OnBoardScreen from "./screens/OnBoardScreen";
 import RegisterScreen from "./screens/RegisterScreen";
@@ -22,10 +22,14 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import { useEffect } from "react";
 import MiniDrawerContent from "./components/templates/MiniDrawerContent";
 import MomentsScreen from "./screens/MomentsScreen";
 import SettingScreen from "./screens/SettingScreen";
 import TodoScreen from "./screens/TodoScreen";
+
+import * as Notifications from "expo-notifications";
+
 export type RootNavigatorParamsList = {
   splash: undefined;
   welcome: undefined;
@@ -43,8 +47,23 @@ export type MainNavigatorParamsList = {
 
 const RootStack = createNativeStackNavigator<RootNavigatorParamsList>();
 const Drawer = createDrawerNavigator<MainNavigatorParamsList>();
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: false,
+    shouldShowList: false,
+  }),
+});
 
 export default function Index() {
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(() => {
+      scheduleDailyNotification(17, 30);
+    });
+  }, []);
+
   const [fontsLoaded] = useFonts({
     ComicNeue_300Light,
     ComicNeue_400Regular,
@@ -100,3 +119,33 @@ const MainStack = () => {
     </GestureHandlerRootView>
   );
 };
+
+const scheduleDailyNotification = async (hour: number, minute: number) => {
+  await Notifications.cancelAllScheduledNotificationsAsync(); // clear old
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "⏰ Daily Reminder",
+      body: `This is your daily reminder at ${hour}:${minute
+        .toString()
+        .padStart(2, "0")}`,
+    },
+    trigger: {
+      hour,
+      minute,
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+    },
+  });
+};
+
+// Request notification permission
+async function registerForPushNotificationsAsync() {
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+    });
+  }
+
+  const { status } = await Notifications.requestPermissionsAsync();
+  return status === "granted";
+}

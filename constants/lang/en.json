@@ -34,5 +34,10 @@
     "noMoment": "Hey, go ahead and drop your memories here!",
     "noTodo": "Hey, share some fun ideas to do together!",
     "addNewTodo": "Add new Bucket List"
+  },
+  "Setting": {
+    "settings": "Settings",
+    "deleteAccount": "Delete Account",
+    "saveProfile": "Save Profile"
   }
 }

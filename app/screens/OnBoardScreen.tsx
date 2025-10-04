@@ -1,13 +1,13 @@
+import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackActions } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import CoupleFloatingBallons from "../../assets/images/couple-floating-balloons.svg";
-
-import text from "@/constants/text";
-import { StackActions } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import PrimaryButton from "../components/common/PrimaryButton";
 import PrimaryTextField from "../components/common/TextField";
 import { RootNavigatorParamsList } from "../index";
@@ -22,7 +22,9 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
   const [partnerName, setPartnerName] = useState("");
   const [date, setDate] = useState("");
 
-  const onButtonClick = () => {
+  const onButtonClick = async () => {
+    await AsyncStorage.setItem(`@userName`, name);
+    await AsyncStorage.setItem(`@partnerName`, partnerName);
     navigation.dispatch(StackActions.replace("register"));
   };
   return (

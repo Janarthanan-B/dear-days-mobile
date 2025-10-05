@@ -1,4 +1,6 @@
 // App.js or App.tsx
+import { Colors, ThemeName } from "@/constants/theme";
+import { useTheme } from "@/hooks/ThemeContext";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -10,14 +12,22 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const iconList: any[] = [
-  { name: "edit", Component: Feather },
-  { name: "trash", Component: Feather },
-  { name: "share", Component: Feather },
-  { name: "info", Component: Feather },
+export type MemoryOptionType = "add" | "edit" | "delete";
+
+const iconList: { icon: any; fn: MemoryOptionType }[] = [
+  { icon: "plus-square", fn: "add" },
+  { icon: "edit", fn: "edit" },
+  { icon: "trash", fn: "delete" },
 ];
 
-export default function ScreenModel() {
+interface Props {
+  onSelect: (text: MemoryOptionType) => void;
+}
+
+const MemoryOptions: React.FC<Props> = ({ onSelect }) => {
+  const { themeName, theme } = useTheme();
+  const styles = createStyles(themeName);
+
   const [visible, setVisible] = useState(false);
 
   const containerOpacity = useSharedValue(0);
@@ -64,7 +74,11 @@ export default function ScreenModel() {
       {/* Top Right Icon */}
       <View style={styles.topRight}>
         <TouchableOpacity onPress={toggleMenu}>
-          <Feather name="more-vertical" size={24} color="#ed088a" />
+          <Feather
+            name="more-vertical"
+            size={24}
+            color={theme.backgroundPrimary}
+          />
         </TouchableOpacity>
       </View>
 
@@ -93,11 +107,15 @@ export default function ScreenModel() {
             <Animated.View key={index} style={animatedIconStyle}>
               <Pressable
                 style={styles.iconButton}
-                onPress={() => console.log(`Pressed ${icon.name}`)}
+                onPress={() => onSelect(icon.fn)}
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
               >
-                <icon.Component name={icon.name} size={24} color="#ED088A" />
+                <Feather
+                  name={icon.icon}
+                  size={24}
+                  color={theme.backgroundPrimary}
+                />
               </Pressable>
             </Animated.View>
           );
@@ -105,34 +123,34 @@ export default function ScreenModel() {
       </Animated.View>
     </>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#121212",
-  },
-  topRight: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-    zIndex: 10,
-  },
-  menuContainer: {
-    position: "absolute",
-    top: 90,
-    right: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 12,
-    paddingVertical: 8,
-    gap: 10,
-    zIndex: 9,
-    paddingHorizontal: 4,
-    overflow: "hidden",
-  },
-  iconButton: {
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const createStyles = (themeName: ThemeName) => {
+  const theme = Colors[themeName];
+  return StyleSheet.create({
+    topRight: {
+      position: "absolute",
+      top: 50,
+      right: 20,
+      zIndex: 10,
+    },
+    menuContainer: {
+      position: "absolute",
+      top: 90,
+      right: 10,
+      backgroundColor: theme.overlay,
+      borderRadius: 12,
+      paddingVertical: 8,
+      gap: 10,
+      zIndex: 9,
+      paddingHorizontal: 4,
+      overflow: "hidden",
+    },
+    iconButton: {
+      padding: 10,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+};
+export default MemoryOptions;

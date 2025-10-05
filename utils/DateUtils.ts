@@ -53,3 +53,60 @@ export const groupTodos = (todos: Todo[]): TodoGroup[] => {
 
   return groups;
 };
+
+export const DATE_FORMATS = ["RELATIVE", "ISO", "FULL"];
+
+const getDateDifference = (dateString: string) => {
+  const start = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - start.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  const years = Math.floor(diffDays / 365);
+  const months = Math.floor((diffDays % 365) / 30);
+  const weeks = Math.floor(((diffDays % 365) % 30) / 7);
+  const days = ((diffDays % 365) % 30) % 7;
+
+  return { years, months, weeks, days, diffDays };
+};
+
+export const formatDate = (dateString: string, dateFormatIndex: number) => {
+  const { years, months, weeks, days, diffDays } =
+    getDateDifference(dateString);
+  const formatType = DATE_FORMATS[dateFormatIndex];
+
+  if (formatType === "RELATIVE") {
+    if (years > 0)
+      return `${years} year${years > 1 ? "s" : ""}, ${months} month${
+        months > 1 ? "s" : ""
+      }, ${days} day${days > 1 ? "s" : ""} ago`;
+    if (months > 0)
+      return `${months} month${months > 1 ? "s" : ""}, ${weeks} week${
+        weeks > 1 ? "s" : ""
+      }, ${days} day${days > 1 ? "s" : ""} ago`;
+    if (weeks > 0)
+      return `${weeks} week${weeks > 1 ? "s" : ""}, ${days} day${
+        days > 1 ? "s" : ""
+      } ago`;
+    return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  }
+
+  if (formatType === "ISO") {
+    const d = new Date(dateString);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  if (formatType === "FULL") {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+
+  return "";
+};

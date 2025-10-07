@@ -51,9 +51,11 @@ const MomentCard: React.FC<Props> = ({ item, onSelect }) => {
         onPress={() => onSelect(item.id)}
       >
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description} numberOfLines={3}>
-          {item.description}
-        </Text>
+        {item.description != "" && (
+          <Text style={styles.description} numberOfLines={3}>
+            {item.description}
+          </Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -133,7 +135,7 @@ const createStyles = (themeName: ThemeName) => {
       fontFamily: "Roboto_500Medium",
       fontSize: 16,
       color: theme.primary,
-      paddingBottom: 8,
+
       textAlign: "center",
     },
     description: {
@@ -142,6 +144,7 @@ const createStyles = (themeName: ThemeName) => {
       fontFamily: "Roboto_300Light",
       fontSize: 16,
       color: theme.textPrimary,
+      paddingTop: 8,
     },
     loopCarousel: {
       position: "absolute",

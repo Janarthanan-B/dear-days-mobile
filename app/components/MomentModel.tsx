@@ -2,9 +2,9 @@ import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
 import { Moment } from "@/data/Moment";
 import { useTheme } from "@/hooks/ThemeContext";
+import { pickImages } from "@/utils/ImagePicker";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -77,21 +77,8 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
   };
 
   const pickImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images"],
-        allowsEditing: false,
-        quality: 1,
-        allowsMultipleSelection: true,
-      });
-
-      if (!result.canceled) {
-        const selected = result.assets.map((a) => a.uri);
-        setPhotos((prev) => [...prev, ...selected]);
-      }
-    } catch (error) {
-      console.log("Error picking image:", error);
-    }
+    const images = await pickImages();
+    if (images) setPhotos((prev) => [...prev, ...images]);
   };
 
   const handleDeletePhoto = (index: number) => {

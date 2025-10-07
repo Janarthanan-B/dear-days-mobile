@@ -1,9 +1,9 @@
 import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
+import { pickImage } from "@/utils/ImagePicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackActions, useNavigation } from "@react-navigation/native";
-import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -51,28 +51,11 @@ const SettingScreen = () => {
     }
   };
 
-  const pickImage = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      Alert.alert(
-        "Permission required",
-        "Permission to access gallery is required!"
-      );
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: false,
-      aspect: [1, 1],
-      quality: 1,
-      allowsMultipleSelection: false,
-    });
-
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
-      await AsyncStorage.setItem("@profileImage", result.assets[0].uri);
+  const pickData = async () => {
+    const image = await pickImage();
+    if (image) {
+      setProfileImage(image);
+      await AsyncStorage.setItem("@profileImage", image);
     }
   };
 
@@ -129,7 +112,7 @@ const SettingScreen = () => {
               />
               <TouchableOpacity
                 style={styles.editIconContainer}
-                onPress={pickImage}
+                onPress={pickData}
               >
                 <Image
                   source={require("../../assets/icon/edit_circle_icon.png")}

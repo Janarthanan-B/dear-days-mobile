@@ -25,3 +25,27 @@ export const pickImage = async (): Promise<string | null> => {
   }
   return null;
 };
+
+export const pickImages = async (): Promise<string[] | null> => {
+  const permissionResult =
+    await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (!permissionResult.granted) {
+    Alert.alert(
+      "Permission required",
+      "Permission to access gallery is required!"
+    );
+    return null;
+  }
+
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ["images"],
+    allowsEditing: false,
+    quality: 1,
+    allowsMultipleSelection: true,
+  });
+
+  if (!result.canceled) {
+    return result.assets.map((a) => a.uri);
+  }
+  return null;
+};

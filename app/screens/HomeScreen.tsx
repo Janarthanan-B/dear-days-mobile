@@ -10,6 +10,7 @@ import {
   StackActions,
   useNavigation,
 } from "@react-navigation/native";
+import Constants from "expo-constants";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -132,7 +133,7 @@ export default function HomeScreen() {
         >
           {/* Menu Icon */}
           <TouchableOpacity
-            style={styles.menuIcon}
+            style={[styles.menuIcon, { top: Constants.statusBarHeight + 24 }]}
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
           >
             <Ionicons name="menu" size={26} color={theme.backgroundPrimary} />
@@ -213,7 +214,7 @@ const createStyles = (themeName: ThemeName) => {
     },
     menuIcon: {
       position: "absolute",
-      top: 24,
+      top: 24 + 24,
       left: 24 - 6,
       borderRadius: 10,
       padding: 6,

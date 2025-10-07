@@ -110,3 +110,28 @@ export const formatDate = (dateString: string, dateFormatIndex: number) => {
 
   return "";
 };
+
+export const getDaysTogether = (startDate: string): string => {
+  if (!startDate) return "";
+
+  const start = new Date(startDate);
+  const now = new Date();
+
+  const diffTime = now.getTime() - start.getTime();
+  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  // Optional: Format into years, months, days
+  const years = Math.floor(days / 365);
+  const months = Math.floor((days % 365) / 30);
+  const remainingDays = days - years * 365 - months * 30;
+
+  if (years > 0)
+    return `${years} year${years > 1 ? "s" : ""} ${months} month${
+      months > 1 ? "s" : ""
+    } ${remainingDays} day${remainingDays > 1 ? "s" : ""}`;
+  if (months > 0)
+    return `${months} month${months > 1 ? "s" : ""} ${remainingDays} day${
+      remainingDays > 1 ? "s" : ""
+    }`;
+  return `${days} day${days > 1 ? "s" : ""}`;
+};

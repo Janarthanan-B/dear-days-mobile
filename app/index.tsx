@@ -22,13 +22,17 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MiniDrawerContent from "./components/templates/MiniDrawerContent";
 import MomentsScreen from "./screens/MomentsScreen";
 import SettingScreen from "./screens/SettingScreen";
 import TodoScreen from "./screens/TodoScreen";
 
+import { getDaysTogether } from "@/utils/DateUtils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
+import AboutUsScreen from "./screens/AboutUsScreen";
+import TermsPolicyScreen from "./screens/TermsPolicyScreen";
 
 export type RootNavigatorParamsList = {
   splash: undefined;
@@ -43,6 +47,8 @@ export type MainNavigatorParamsList = {
   moments: undefined;
   todo: undefined;
   settings: undefined;
+  aboutUs: undefined;
+  termsPolicy: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootNavigatorParamsList>();
@@ -58,11 +64,32 @@ Notifications.setNotificationHandler({
 });
 
 export default function Index() {
+  const momentKeyStore = "@memories";
+  const [screen, SetScreen] = useState<"splash" | "main">("splash");
+
   useEffect(() => {
-    registerForPushNotificationsAsync().then(() => {
-      scheduleDailyNotification(17, 30);
-    });
+    loadData();
   }, []);
+
+  const loadData = async () => {
+    const data = await AsyncStorage.getItem(momentKeyStore);
+    const storedNotifications = await AsyncStorage.getItem(
+      "@notificationsEnabled"
+    );
+    if (data != null && storedNotifications != null) {
+      SetScreen("main");
+      if (JSON.parse(storedNotifications)) {
+        registerForPushNotificationsAsync().then(() => {
+          scheduleDailyNotification(
+            17,
+            30,
+            JSON.parse(data)[0].description,
+            JSON.parse(data)[0].description
+          );
+        });
+      }
+    }
+  };
 
   const [fontsLoaded] = useFonts({
     ComicNeue_300Light,
@@ -84,7 +111,7 @@ export default function Index() {
     <ThemeProvider>
       <RootStack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="splash"
+        initialRouteName={screen}
       >
         <RootStack.Screen name="splash" component={SplashScreen} />
         <RootStack.Screen name="welcome" component={WelcomeScreen} />
@@ -115,19 +142,24 @@ const MainStack = () => {
         <Drawer.Screen name="moments" component={MomentsScreen} />
         <Drawer.Screen name="todo" component={TodoScreen} />
         <Drawer.Screen name="settings" component={SettingScreen} />
+        <Drawer.Screen name="aboutUs" component={AboutUsScreen} />
+        <Drawer.Screen name="termsPolicy" component={TermsPolicyScreen} />
       </Drawer.Navigator>
     </GestureHandlerRootView>
   );
 };
 
-const scheduleDailyNotification = async (hour: number, minute: number) => {
+const scheduleDailyNotification = async (
+  hour: number,
+  minute: number,
+  description: string,
+  date: string
+) => {
   await Notifications.cancelAllScheduledNotificationsAsync(); // clear old
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "⏰ Daily Reminder",
-      body: `This is your daily reminder at ${hour}:${minute
-        .toString()
-        .padStart(2, "0")}`,
+      title: `You have been ${description} for ${getDaysTogether(date)}`,
+      body: ``,
     },
     trigger: {
       hour,

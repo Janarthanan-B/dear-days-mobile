@@ -46,6 +46,15 @@
   "Setting": {
     "settings": "Settings",
     "deleteAccount": "Delete Account",
-    "saveProfile": "Save Profile"
+    "saveProfile": "Save Profile",
+    "enableNotification": "Enable Notifications"
+  },
+  "Terms": {
+    "aboutUs": "About Us",
+    "aboutUsDetails": "Hi! We’re a husband and wife who love creating things together. Dear Days started as a small idea — a way to keep our memories in one place and celebrate the little moments that make every day special. We decided to turn that idea into an app, hoping it helps other couples do the same — to remember, smile, and stay connected through their own “dear days”.",
+    "contact": "We’d love to hear from you — whether it’s feedback, questions, or freelance opportunities. Let’s connect!",
+    "designBy": "Design by",
+    "codeBy": "Code by",
+    "terms_Policy": "Terms & Policy"
   }
 }

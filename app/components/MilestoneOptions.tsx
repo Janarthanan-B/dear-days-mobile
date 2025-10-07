@@ -2,6 +2,7 @@
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
 import { Feather } from "@expo/vector-icons";
+import Constants from "expo-constants";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
@@ -72,7 +73,7 @@ const MilestoneOptions: React.FC<Props> = ({ onSelect }) => {
   return (
     <>
       {/* Top Right Icon */}
-      <View style={styles.topRight}>
+      <View style={[styles.topRight, { top: Constants.statusBarHeight + 24 }]}>
         <TouchableOpacity onPress={toggleMenu}>
           <Feather
             name="more-vertical"
@@ -83,7 +84,13 @@ const MilestoneOptions: React.FC<Props> = ({ onSelect }) => {
       </View>
 
       {/* Icon Menu */}
-      <Animated.View style={[styles.menuContainer, containerStyle]}>
+      <Animated.View
+        style={[
+          styles.menuContainer,
+          { top: Constants.statusBarHeight + 24 + 36 },
+          containerStyle,
+        ]}
+      >
         {iconList.map((icon, index) => {
           const anim = iconAnimations[index];
 
@@ -95,20 +102,26 @@ const MilestoneOptions: React.FC<Props> = ({ onSelect }) => {
             ],
           }));
 
+          const handlePress = () => {
+            onSelect(icon.fn);
+            setVisible(false);
+          };
+
           const handlePressIn = () => {
             anim.scale.value = withTiming(0.9, { duration: 100 });
+            setVisible(false);
           };
 
           const handlePressOut = () => {
             anim.scale.value = withTiming(1, { duration: 100 });
-            setVisible(!visible);
+            setVisible(false);
           };
 
           return (
             <Animated.View key={index} style={animatedIconStyle}>
               <Pressable
                 style={styles.iconButton}
-                onPress={() => onSelect(icon.fn)}
+                onPress={handlePress}
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
               >
@@ -131,15 +144,15 @@ const createStyles = (themeName: ThemeName) => {
   return StyleSheet.create({
     topRight: {
       position: "absolute",
-      top: 26,
+      //top: 24 + 24,
       right: 24,
       padding: 6,
       zIndex: 10,
     },
     menuContainer: {
       position: "absolute",
-      top: 90,
-      right: 10,
+      //top: 90,
+      right: 16,
       backgroundColor: theme.overlay,
       borderRadius: 12,
       paddingVertical: 8,

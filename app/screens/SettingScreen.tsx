@@ -2,8 +2,9 @@ import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
 import { pickImage } from "@/utils/ImagePicker";
+import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { StackActions } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -18,10 +19,14 @@ import { Switch } from "react-native-ui-lib";
 import PrimaryTextField from "../components/common/TextField";
 import ScreenTemplate from "../components/templates/ScreenTemplate";
 
-const SettingScreen = () => {
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { MainNavigatorParamsList } from "../index";
+
+type Props = NativeStackScreenProps<MainNavigatorParamsList, "settings">;
+
+const SettingScreen: React.FC<Props> = ({ navigation }) => {
   const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
-  const navigation = useNavigation();
 
   const [profileImage, setProfileImage] = useState("");
   const [userName, setUserName] = useState("");
@@ -135,7 +140,7 @@ const SettingScreen = () => {
             required
           />
           <View style={styles.segmentContainer}>
-            <Text style={styles.label}>Enable Notifications</Text>
+            <Text style={styles.label}>{text.Setting.enableNotification}</Text>
             <Switch
               value={notificationsEnabled}
               onColor={theme.primary}
@@ -149,6 +154,20 @@ const SettingScreen = () => {
               }}
             />
           </View>
+          <TouchableOpacity
+            style={styles.segmentContainer}
+            onPress={() => navigation.navigate("aboutUs")}
+          >
+            <Text style={styles.label}>{text.Terms.aboutUs}</Text>
+            <Ionicons name="arrow-forward" size={24} color={theme.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.segmentContainer}
+            onPress={() => navigation.navigate("termsPolicy")}
+          >
+            <Text style={styles.label}>{text.Terms.terms_Policy}</Text>
+            <Ionicons name="arrow-forward" size={24} color={theme.primary} />
+          </TouchableOpacity>
         </View>
       </View>
       <TouchableOpacity style={styles.deleteButton} onPress={deleteAccount}>
@@ -182,17 +201,6 @@ const createStyles = (themeName: ThemeName) => {
       right: 0,
       borderRadius: 20,
       padding: 8,
-      ...Platform.select({
-        ios: {
-          shadowColor: theme.overlay,
-          shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
-        },
-        android: {
-          elevation: 5,
-        },
-      }),
     },
     icon: {
       width: 24,

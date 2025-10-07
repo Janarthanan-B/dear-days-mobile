@@ -72,15 +72,13 @@ const createStyles = (themeName: ThemeName) => {
       flex: 1,
       backgroundColor: theme.backgroundSecoundary,
       alignItems: "center",
-      paddingTop: 40,
+      paddingTop: 80,
     },
     iconWrapper: {
       marginVertical: 20,
     },
     button: {
       padding: 10,
-      borderRadius: 30,
-      elevation: 5,
     },
     icon: {
       height: 24,

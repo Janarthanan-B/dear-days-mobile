@@ -29,6 +29,7 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
   const onButtonClick = async () => {
     await AsyncStorage.setItem(`@userName`, name);
     await AsyncStorage.setItem(`@partnerName`, partnerName);
+    await AsyncStorage.setItem("@notificationsEnabled", JSON.stringify(true));
     const newMileStone: Milestone = {
       id: Date.now().toString().toString(),
       description: "together",

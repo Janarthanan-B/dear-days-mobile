@@ -126,19 +126,22 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-
-          <PrimaryTextField
-            placeholder={text.OnBoard.yourName}
-            value={userName}
-            onChangeText={(value) => handleTextChange("userName", value)}
-            required
-          />
-          <PrimaryTextField
-            placeholder={text.OnBoard.yourPartnerName}
-            value={partnerName}
-            onChangeText={(value) => handleTextChange("partnerName", value)}
-            required
-          />
+          <View style={styles.segmentContainer}>
+            <PrimaryTextField
+              placeholder={text.OnBoard.yourName}
+              value={userName}
+              onChangeText={(value) => handleTextChange("userName", value)}
+              required
+            />
+          </View>
+          <View style={styles.segmentContainer}>
+            <PrimaryTextField
+              placeholder={text.OnBoard.yourPartnerName}
+              value={partnerName}
+              onChangeText={(value) => handleTextChange("partnerName", value)}
+              required
+            />
+          </View>
           <View style={styles.segmentContainer}>
             <Text style={styles.label}>{text.Setting.enableNotification}</Text>
             <Switch
@@ -227,7 +230,7 @@ const createStyles = (themeName: ThemeName) => {
       }),
     },
     segmentContainer: {
-      height: 30,
+      paddingBottom: 8,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",

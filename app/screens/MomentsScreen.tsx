@@ -6,16 +6,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import CouplePhotoBooth from "../../assets/images/couple-in-photo-booth.svg";
-import AddMomentModal from "../components/AddMomentModel";
 import MomentCard from "../components/MomentCard";
+import MomentModal from "../components/MomentModel";
 import ScreenTemplate from "../components/templates/ScreenTemplate";
 
 const MomentsScreen = () => {
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
+  const momentKeyStore = "@memories";
 
   const [moments, setMoments] = useState<Moment[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     loadMoments();
@@ -23,7 +25,7 @@ const MomentsScreen = () => {
 
   const loadMoments = async () => {
     try {
-      const stored = await AsyncStorage.getItem("moments");
+      const stored = await AsyncStorage.getItem(momentKeyStore);
       if (stored) {
         setMoments(JSON.parse(stored));
       }
@@ -32,14 +34,10 @@ const MomentsScreen = () => {
     }
   };
 
-  const saveMoment = async (moment: Moment) => {
-    try {
-      const updated = [...moments, moment];
-      setMoments(updated);
-      await AsyncStorage.setItem("moments", JSON.stringify(updated));
-    } catch (err) {
-      console.log("Error saving moment", err);
-    }
+  const onClose = async () => {
+    setActiveId(null);
+    setModalVisible(false);
+    loadMoments();
   };
 
   return (
@@ -56,24 +54,21 @@ const MomentsScreen = () => {
       ) : (
         <FlatList
           data={moments}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.id}
           renderItem={({ item }) => (
             <MomentCard
-              title={item.title}
-              description={item.description}
-              date={item.date}
-              photos={item.photos}
+              item={item}
+              onSelect={(id) => {
+                setActiveId(id);
+                setModalVisible(true);
+              }}
             />
           )}
           contentContainerStyle={{ paddingBottom: 40 }}
         />
       )}
 
-      <AddMomentModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSave={saveMoment}
-      />
+      <MomentModal id={activeId} visible={modalVisible} onClose={onClose} />
     </ScreenTemplate>
   );
 };

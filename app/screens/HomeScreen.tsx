@@ -36,7 +36,7 @@ export default function HomeScreen() {
   const [partnerName, setPartnerName] = useState("");
   const [dateFormatIndex, setDateFormatIndex] = useState(0);
   const [model, setModel] = useState(false);
-  const { themeName } = useTheme();
+  const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
   const memoryKeyStore = "@memories";
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -93,8 +93,9 @@ export default function HomeScreen() {
     if (memories.length != 1) {
       const updated = memories.filter((s) => s.id !== id);
       saveMemories(updated);
+    } else {
+      Alert.alert("Deletion Denied", "Atleat one memory is needed");
     }
-    Alert.alert("Deletion Denied", "Atleat one memory is needed");
   };
 
   const toggleDateFormat = () => {
@@ -122,7 +123,7 @@ export default function HomeScreen() {
             style={styles.menuIcon}
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
           >
-            <Ionicons name="menu" size={26} color="#fff" />
+            <Ionicons name="menu" size={26} color={theme.backgroundPrimary} />
           </TouchableOpacity>
 
           {/* Main Card */}

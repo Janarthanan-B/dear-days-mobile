@@ -2,16 +2,26 @@ import { Colors, ThemeName } from "@/constants/theme";
 import { Moment } from "@/data/Moment";
 import { useTheme } from "@/hooks/ThemeContext";
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Carousel } from "react-native-ui-lib";
 
-const MomentCard: React.FC<Moment> = ({ title, date, description, photos }) => {
+interface Props {
+  onSelect: (id: string) => void;
+  item: Moment;
+}
+const MomentCard: React.FC<Props> = ({ item, onSelect }) => {
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
   return (
     <View style={styles.container}>
       <View style={styles.imageSection}>
-        <Text style={styles.dateText}>{date}</Text>
+        <Text style={styles.dateText}>{item.date}</Text>
         <Carousel
           containerStyle={{
             height: "100%",
@@ -24,7 +34,7 @@ const MomentCard: React.FC<Moment> = ({ title, date, description, photos }) => {
           //pageControlPosition={Carousel.pageControlPositions.OVER}
           showCounter
         >
-          {photos.map((uri, i) => {
+          {item.photos?.map((uri, i) => {
             return (
               <ImageBackground
                 source={{ uri }}
@@ -36,13 +46,15 @@ const MomentCard: React.FC<Moment> = ({ title, date, description, photos }) => {
           })}
         </Carousel>
       </View>
-      <View style={styles.contentSection}>
-        <Text style={styles.title}>{title}</Text>
+      <TouchableOpacity
+        style={styles.contentSection}
+        onPress={() => onSelect(item.id)}
+      >
+        <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description} numberOfLines={3}>
-          {description ||
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"}
+          {item.description}
         </Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -118,11 +130,12 @@ const createStyles = (themeName: ThemeName) => {
       fontSize: 16,
       color: theme.primary,
       paddingBottom: 8,
+      textAlign: "center",
     },
     description: {
       textTransform: "capitalize",
       fontFamily: "Roboto_300Light",
-      fontSize: 14,
+      fontSize: 16,
       color: theme.textPrimary,
     },
     loopCarousel: {

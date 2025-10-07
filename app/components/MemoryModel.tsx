@@ -5,7 +5,7 @@ import { useTheme } from "@/hooks/ThemeContext";
 import { pickImage } from "@/utils/ImagePicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Image, Modal, StyleSheet } from "react-native";
+import { Image, Modal, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "react-native-ui-lib";
 import PrimaryButton from "./common/PrimaryButton";
 import PrimaryTextField from "./common/TextField";
@@ -107,42 +107,43 @@ const MemoryModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
           <Text style={styles.modalTitle}>
             {isAdd ? text.Moment.addNew : text.Moment.editMemory}
           </Text>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <PrimaryTextField
+              placeholder={text.Moment.description}
+              value={description}
+              onChangeText={setDescription}
+              multiline={true}
+            />
+            <PrimaryTextField
+              placeholder={text.Moment.date}
+              value={date}
+              onChangeText={setDate}
+            />
 
-          <PrimaryTextField
-            placeholder={text.Moment.description}
-            value={description}
-            onChangeText={setDescription}
-            multiline={true}
-          />
-          <PrimaryTextField
-            placeholder={text.Moment.date}
-            value={date}
-            onChangeText={setDate}
-          />
+            {photo ? (
+              <View style={styles.imageContainer}>
+                <Image source={{ uri: photo }} style={styles.previewImg} />
+              </View>
+            ) : null}
 
-          {photo ? (
-            <View style={styles.imageContainer}>
-              <Image source={{ uri: photo }} style={styles.previewImg} />
+            <PrimaryButton title={text.Moment.addPhotos} onPress={pickData} />
+
+            <View style={styles.actionBtn}>
+              <View style={{ width: "50%", paddingRight: 5 }}>
+                <PrimaryButton
+                  title={text.Navigation.cancel}
+                  onPress={handleClose}
+                  secondary
+                />
+              </View>
+              <View style={{ width: "50%", paddingLeft: 5 }}>
+                <PrimaryButton
+                  title={text.Navigation.save}
+                  onPress={handleSave}
+                />
+              </View>
             </View>
-          ) : null}
-
-          <PrimaryButton title={text.Moment.addPhotos} onPress={pickData} />
-
-          <View style={styles.actionBtn}>
-            <View style={{ width: "50%", paddingRight: 5 }}>
-              <PrimaryButton
-                title={text.Navigation.cancel}
-                onPress={handleClose}
-                secondary
-              />
-            </View>
-            <View style={{ width: "50%", paddingLeft: 5 }}>
-              <PrimaryButton
-                title={text.Navigation.save}
-                onPress={handleSave}
-              />
-            </View>
-          </View>
+          </ScrollView>
         </View>
       </View>
     </Modal>
@@ -160,7 +161,7 @@ const createStyles = (themeName: ThemeName) => {
     },
     modalBox: {
       width: "90%",
-      height: "80%",
+      height: "70%",
       backgroundColor: theme.backgroundPrimary,
       borderRadius: 20,
       padding: 24,
@@ -171,6 +172,7 @@ const createStyles = (themeName: ThemeName) => {
       color: theme.primary,
       textAlign: "center",
       fontFamily: "Roboto_500Medium",
+      paddingBottom: 24,
     },
     imageContainer: {
       flexDirection: "row",

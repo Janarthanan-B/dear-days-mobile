@@ -1,6 +1,7 @@
 import { MainNavigatorParamsList } from "@/app";
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
 import { useDrawerProgress } from "@react-navigation/drawer";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -33,7 +34,7 @@ const ScreenTemplate: React.FC<TitleTemplateProps> = ({
   onAddClick,
   children,
 }) => {
-  const { themeName } = useTheme();
+  const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
   const navigation = useNavigation<MainNav>();
   const progress = useDrawerProgress();
@@ -56,12 +57,12 @@ const ScreenTemplate: React.FC<TitleTemplateProps> = ({
               style={styles.menuBtn}
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             >
-              <Text style={styles.menuIcon}>≡</Text>
+              <Ionicons name="menu" size={24} color={theme.primary} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>{title}</Text>
             {addButton ? (
               <TouchableOpacity style={styles.plusBtn} onPress={onAddClick}>
-                <Text style={styles.plusIcon}>＋</Text>
+                <Ionicons name="add-circle" size={26} color={theme.primary} />
               </TouchableOpacity>
             ) : (
               <View></View>
@@ -94,7 +95,7 @@ const createStyles = (themeName: ThemeName) => {
       backgroundColor: theme.backgroundPrimary,
     },
     menuBtn: {
-      padding: 8,
+      //padding: 8,
     },
     menuIcon: {
       fontSize: 30,
@@ -109,7 +110,6 @@ const createStyles = (themeName: ThemeName) => {
       letterSpacing: 0,
     },
     plusBtn: {
-      backgroundColor: theme.primary,
       borderRadius: 20,
       width: 32,
       height: 32,

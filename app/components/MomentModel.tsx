@@ -94,6 +94,10 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
     }
   };
 
+  const handleDeletePhoto = (index: number) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const deleteSlide = () => {
     if (moments.length != 1) {
       const updatedMoments = moments.filter((s) => s.id !== id);
@@ -188,7 +192,19 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
             {photos.length > 0 && (
               <View style={styles.imageContainer}>
                 {photos.map((uri, idx) => (
-                  <Image key={idx} source={{ uri }} style={styles.previewImg} />
+                  <View key={idx} style={styles.imageWrapper}>
+                    <Image source={{ uri }} style={styles.previewImg} />
+                    <TouchableOpacity
+                      style={styles.deleteIcon}
+                      onPress={() => handleDeletePhoto(idx)}
+                    >
+                      <Ionicons
+                        name="close-circle"
+                        size={20}
+                        color={theme.primary}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 ))}
               </View>
             )}
@@ -272,6 +288,19 @@ const createStyles = (themeName: ThemeName) => {
     wrapper: {
       width: "100%",
       paddingBottom: 16,
+    },
+    imageWrapper: {
+      position: "relative",
+      marginRight: 8,
+    },
+    deleteIcon: {
+      position: "absolute",
+      top: -6,
+      right: -6,
+      backgroundColor: "white",
+      borderRadius: 10,
+      padding: 2,
+      elevation: 3,
     },
   });
 };

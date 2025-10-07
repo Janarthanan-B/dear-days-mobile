@@ -101,6 +101,7 @@ const MilestoneOptions: React.FC<Props> = ({ onSelect }) => {
 
           const handlePressOut = () => {
             anim.scale.value = withTiming(1, { duration: 100 });
+            setVisible(!visible);
           };
 
           return (

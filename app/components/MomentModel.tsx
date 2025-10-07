@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { Text, View } from "react-native-ui-lib";
 import PrimaryButton from "./common/PrimaryButton";
+import PrimaryDateField from "./common/PrimaryDateField";
 import PrimaryTextField from "./common/TextField";
 
 interface Props {
@@ -30,7 +31,7 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [photos, setPhotos] = useState<string[]>([]);
-  const [isAdd, setIsAdd] = useState<boolean>(true);
+  const [isAdd, setIsAdd] = useState<boolean>(id == null);
 
   const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
@@ -164,7 +165,7 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.wrapper}>
               <PrimaryTextField
-                placeholder={text.Moment.title}
+                placeholder={text.Moment.fieldTitle}
                 value={title}
                 onChangeText={setTitle}
               />
@@ -178,10 +179,10 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
               />
             </View>
             <View style={styles.wrapper}>
-              <PrimaryTextField
+              <PrimaryDateField
                 placeholder={text.Moment.date}
                 value={date}
-                onChangeText={setDate}
+                onChange={setDate}
               />
             </View>
             {photos.length > 0 && (
@@ -256,6 +257,7 @@ const createStyles = (themeName: ThemeName) => {
       alignSelf: "center",
       width: "100%",
       paddingBottom: 16,
+      gap: 5,
     },
     previewImg: {
       width: 70,

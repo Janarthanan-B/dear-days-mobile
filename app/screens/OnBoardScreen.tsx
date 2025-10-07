@@ -10,6 +10,7 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import CoupleFloatingBallons from "../../assets/images/couple-floating-balloons.svg";
 import PrimaryButton from "../components/common/PrimaryButton";
+import PrimaryDateField from "../components/common/PrimaryDateField";
 import PrimaryTextField from "../components/common/TextField";
 import { RootNavigatorParamsList } from "../index";
 
@@ -30,7 +31,7 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
     await AsyncStorage.setItem(`@partnerName`, partnerName);
     const newMileStone: Milestone = {
       id: Date.now().toString().toString(),
-      description: "have been Together",
+      description: "together",
       date,
       photo: "",
       createdAt: new Date().toISOString(),
@@ -56,11 +57,10 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
             value={partnerName}
             onChangeText={setPartnerName}
           />
-          <PrimaryTextField
+          <PrimaryDateField
             placeholder={text.OnBoard.whenTogether}
             value={date}
-            onChangeText={setDate}
-            keyboardType="numeric"
+            onChange={setDate}
           />
         </View>
         <View style={styles.imageContainer}>
@@ -68,6 +68,7 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
             <PrimaryButton
               title={text.Navigation.next}
               onPress={onButtonClick}
+              disabled={name == "" || partnerName == "" || date == ""}
             />
           </View>
           <CoupleFloatingBallons />

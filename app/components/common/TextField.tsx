@@ -10,11 +10,8 @@ interface CustomTextFieldProps {
   onChangeText: (text: string) => void;
   placeholder?: string;
   validate?: (value: string) => boolean | string;
-  errorMessage?: string;
-  enableErrors?: boolean;
-  showCharCounter?: boolean;
+  required?: boolean;
   maxLength?: number;
-  secureTextEntry?: boolean;
   keyboardType?:
     | "default"
     | "email-address"
@@ -30,10 +27,7 @@ const PrimaryTextField: React.FC<CustomTextFieldProps> = ({
   onChangeText,
   placeholder,
   validate,
-  errorMessage,
-  enableErrors = true,
-  showCharCounter = false,
-  secureTextEntry = false,
+  required = false,
   keyboardType = "default",
   multiline = false,
   maxLength = multiline ? 500 : 50,
@@ -51,12 +45,13 @@ const PrimaryTextField: React.FC<CustomTextFieldProps> = ({
       placeholderTextColor={theme.textPrimary}
       value={value}
       onChangeText={onChangeText}
-      //validate={validate}
-      //errorMessage={errorMessage}
-      //enableErrors={enableErrors}
-      showCharCounter={showCharCounter}
+      validateOnBlur
+      validate={required ? "required" : undefined}
+      validationMessage={"This is a required filed"}
+      enableErrors={required}
+      //showCharCounter={showCharCounter}
       maxLength={maxLength}
-      secureTextEntry={secureTextEntry}
+      //secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
       fieldStyle={[styles.fieldStyle, { height: multiline ? 126 : 36 }]}
       selectionColor={theme.textSecondary}

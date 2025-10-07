@@ -13,9 +13,9 @@
   },
   "OnBoard": {
     "aboutYou": "Tell us about You!",
-    "yourName": "Your name",
-    "yourPartnerName": "Your partner's name",
-    "whenTogether": "When did you get together?"
+    "yourName": "Your name *",
+    "yourPartnerName": "Your partner's name *",
+    "whenTogether": "When did you get together? *"
   },
   "Register": {
     "almostDone": "Almost done!",
@@ -25,8 +25,9 @@
   },
   "Moment": {
     "title": "Moments",
+    "fieldTitle": "Your Moment *",
     "description": "Describe as you like",
-    "date": "Date",
+    "date": "Date *",
     "addPhotos": "Add Photos",
     "addMoment": "Add new Moment",
     "editMoment": "Edit Moment",
@@ -38,7 +39,9 @@
   },
   "Milestone": {
     "addMilestone": "Add new Milestone",
-    "editMilestone": "Edit Milestone"
+    "editMilestone": "Edit Milestone",
+    "description": "Your Milestone *",
+    "date": "Date *"
   },
   "Setting": {
     "settings": "Settings",

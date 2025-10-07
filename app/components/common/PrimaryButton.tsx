@@ -28,7 +28,9 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
   return (
     <TouchableOpacity
       style={[
-        secondary ? styles.sec_button_container : styles.button_container,
+        secondary || disabled
+          ? styles.sec_button_container
+          : styles.button_container,
       ]}
       disabled={disabled}
       accessibilityLabel={`${title} Button`}
@@ -73,6 +75,7 @@ const createStyles = (themeName: ThemeName) => {
       borderRadius: 25,
       borderWidth: 2,
       borderColor: theme.borderPrimary,
+      backgroundColor: theme.borderPrimary,
       height: 46,
       width: "100%",
       paddingHorizontal: 25,

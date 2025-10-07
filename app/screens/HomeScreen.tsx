@@ -140,10 +140,12 @@ export default function HomeScreen() {
 
           {/* Main Card */}
           <View style={styles.card}>
-            <Text style={styles.subtitle}>
-              {userName} & {partnerName} {item.date}
+            <Text style={styles.title}>
+              {userName} & {partnerName}
             </Text>
-            <Text style={styles.subtitle}>got married on {item.date}</Text>
+            <Text style={styles.subtitle}>
+              have been {item.description} | {item.date}
+            </Text>
 
             {/* Date Section */}
             <TouchableOpacity
@@ -164,6 +166,7 @@ export default function HomeScreen() {
             visible={model}
             id={activeId}
             onClose={() => {
+              setActiveId(null);
               setModel(false);
               loadData();
             }}
@@ -223,16 +226,17 @@ const createStyles = (themeName: ThemeName) => {
       alignItems: "center",
     },
     title: {
-      color: "#fff",
+      color: theme.backgroundPrimary,
       fontSize: 26,
-      fontWeight: "600",
-      marginBottom: 6,
+      fontFamily: "Roboto_500Medium",
+      marginBottom: 8,
       textAlign: "center",
     },
     subtitle: {
-      color: "#ddd",
-      fontSize: 14,
-      marginBottom: 18,
+      color: theme.backgroundPrimary,
+      fontSize: 16,
+      fontFamily: "Roboto_300Light",
+      marginBottom: 16,
       textAlign: "center",
     },
     dateContainer: {
@@ -242,8 +246,9 @@ const createStyles = (themeName: ThemeName) => {
       flexWrap: "wrap",
     },
     dateText: {
-      color: "#fff",
-      fontSize: 18,
+      color: theme.backgroundPrimary,
+      fontSize: 16,
+      fontFamily: "Roboto_500Medium",
       marginVertical: 2,
     },
     separator: {

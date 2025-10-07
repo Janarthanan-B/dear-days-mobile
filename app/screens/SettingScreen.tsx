@@ -2,6 +2,7 @@ import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import {
@@ -20,6 +21,8 @@ import ScreenTemplate from "../components/templates/ScreenTemplate";
 const SettingScreen = () => {
   const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
+  const navigation = useNavigation();
+
   const [profileImage, setProfileImage] = useState("");
   const [userName, setUserName] = useState("");
   const [partnerName, setPartnerName] = useState("");
@@ -94,6 +97,7 @@ const SettingScreen = () => {
             setPartnerName("");
             setProfileImage("");
             setNotificationsEnabled(false);
+            navigation.dispatch(StackActions.replace("welcome"));
           },
         },
       ]
@@ -139,11 +143,13 @@ const SettingScreen = () => {
             placeholder={text.OnBoard.yourName}
             value={userName}
             onChangeText={(value) => handleTextChange("userName", value)}
+            required
           />
           <PrimaryTextField
             placeholder={text.OnBoard.yourPartnerName}
             value={partnerName}
             onChangeText={(value) => handleTextChange("partnerName", value)}
+            required
           />
           <View style={styles.segmentContainer}>
             <Text style={styles.label}>Enable Notifications</Text>

@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { Image, Modal, ScrollView, StyleSheet } from "react-native";
 import { Text, View } from "react-native-ui-lib";
 import PrimaryButton from "./common/PrimaryButton";
+import PrimaryDateField from "./common/PrimaryDateField";
 import PrimaryTextField from "./common/TextField";
 
 interface Props {
@@ -21,7 +22,9 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [photo, setPhoto] = useState<string>("");
-  const [isAdd, setIsAdd] = useState<boolean>(true);
+  const [isAdd, setIsAdd] = useState<boolean>(id == null);
+  const [userName, setUserName] = useState("");
+  const [partnerName, setPartnerName] = useState("");
 
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
@@ -35,6 +38,10 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
 
   const loadData = async () => {
     try {
+      const storedUserName = await AsyncStorage.getItem("@userName");
+      const storedPartnerName = await AsyncStorage.getItem("@partnerName");
+      if (storedUserName) setUserName(storedUserName);
+      if (storedPartnerName) setPartnerName(storedPartnerName);
       const data = await AsyncStorage.getItem(milestoneKeyStore);
       const parsed = data ? JSON.parse(data) : [];
       setMilestones(parsed);
@@ -110,17 +117,16 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.wrapper}>
               <PrimaryTextField
-                placeholder={text.Moment.description}
+                placeholder={text.Milestone.description}
                 value={description}
                 onChangeText={setDescription}
-                multiline={true}
               />
             </View>
             <View style={styles.wrapper}>
-              <PrimaryTextField
-                placeholder={text.Moment.date}
+              <PrimaryDateField
+                placeholder={text.Milestone.date}
                 value={date}
-                onChangeText={setDate}
+                onChange={setDate}
               />
             </View>
 
@@ -144,8 +150,19 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
                 <PrimaryButton
                   title={text.Navigation.save}
                   onPress={handleSave}
+                  disabled={description == "" || date == ""}
                 />
               </View>
+            </View>
+            <View style={styles.card}>
+              {userName != "" && partnerName != "" && (
+                <Text style={styles.title}>
+                  {userName} & {partnerName}
+                </Text>
+              )}
+              <Text style={styles.subtitle}>
+                have been {description} | {date}
+              </Text>
             </View>
           </ScrollView>
         </View>
@@ -196,6 +213,29 @@ const createStyles = (themeName: ThemeName) => {
     wrapper: {
       width: "100%",
       paddingBottom: 16,
+    },
+    card: {
+      backgroundColor: theme.overlay,
+      borderRadius: 25,
+      paddingVertical: 16,
+      paddingHorizontal: 16,
+      alignItems: "center",
+      marginTop: 30,
+      marginHorizontal: 25,
+    },
+    title: {
+      color: theme.backgroundPrimary,
+      fontSize: 16,
+      fontFamily: "Roboto_500Medium",
+      marginBottom: 4,
+      textAlign: "center",
+    },
+    subtitle: {
+      color: theme.backgroundPrimary,
+      fontSize: 12,
+      fontFamily: "Roboto_300Light",
+      marginBottom: 6,
+      textAlign: "center",
     },
   });
 };

@@ -84,7 +84,7 @@ export default function Index() {
     <ThemeProvider>
       <RootStack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName="main"
+        initialRouteName="splash"
       >
         <RootStack.Screen name="splash" component={SplashScreen} />
         <RootStack.Screen name="welcome" component={WelcomeScreen} />

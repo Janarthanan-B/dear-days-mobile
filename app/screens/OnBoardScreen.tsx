@@ -40,7 +40,7 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
       milestoneKeyStore,
       JSON.stringify([newMileStone])
     );
-    navigation.dispatch(StackActions.replace("register"));
+    navigation.dispatch(StackActions.replace("main"));
   };
   return (
     <SafeAreaProvider>

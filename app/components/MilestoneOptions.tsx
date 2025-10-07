@@ -131,8 +131,9 @@ const createStyles = (themeName: ThemeName) => {
   return StyleSheet.create({
     topRight: {
       position: "absolute",
-      top: 50,
-      right: 20,
+      top: 26,
+      right: 24,
+      padding: 6,
       zIndex: 10,
     },
     menuContainer: {

@@ -213,8 +213,8 @@ const createStyles = (themeName: ThemeName) => {
     },
     menuIcon: {
       position: "absolute",
-      top: 50,
-      left: 25,
+      top: 24,
+      left: 24 - 6,
       borderRadius: 10,
       padding: 6,
     },

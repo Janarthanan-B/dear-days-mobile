@@ -1,4 +1,4 @@
-export interface Memory {
+export interface Milestone {
   id: string;
   date: string;
   dateStyle?: string;

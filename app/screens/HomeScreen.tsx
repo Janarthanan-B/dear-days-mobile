@@ -1,11 +1,15 @@
 import { Colors, ThemeName } from "@/constants/theme";
-import { Memory } from "@/data/Memory";
+import { Milestone } from "@/data/Milestone";
 import { useTheme } from "@/hooks/ThemeContext";
 import { DATE_FORMATS, formatDate } from "@/utils/DateUtils";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDrawerProgress } from "@react-navigation/drawer";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
+import {
+  DrawerActions,
+  StackActions,
+  useNavigation,
+} from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -23,22 +27,24 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import MemoryModel from "../components/MemoryModel";
-import MemoryOptions, { MemoryOptionType } from "../components/MemoryOptions";
+import MilestoneModel from "../components/MilestoneModel";
+import MilestoneOptions, {
+  MilestoneOptionType,
+} from "../components/MilestoneOptions";
 
 const { height, width } = Dimensions.get("window");
 
 export default function HomeScreen() {
   const navigation = useNavigation();
 
-  const [memories, setMemories] = useState<Memory[]>([]);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [userName, setUserName] = useState("");
   const [partnerName, setPartnerName] = useState("");
   const [dateFormatIndex, setDateFormatIndex] = useState(0);
   const [model, setModel] = useState(false);
   const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
-  const memoryKeyStore = "@memories";
+  const milestoneKeyStore = "@milestones";
   const [activeId, setActiveId] = useState<string | null>(null);
   const progress = useDrawerProgress();
 
@@ -58,17 +64,20 @@ export default function HomeScreen() {
     try {
       const storedUserName = await AsyncStorage.getItem("@userName");
       const storedPartnerName = await AsyncStorage.getItem("@partnerName");
-      const data = await AsyncStorage.getItem(memoryKeyStore);
+      const data = await AsyncStorage.getItem(milestoneKeyStore);
       if (storedUserName) setUserName(storedUserName);
       if (storedPartnerName) setPartnerName(storedPartnerName);
       const parsed = data ? JSON.parse(data) : [];
-      setMemories(parsed);
+      if (parsed.length <= 0) {
+        navigation.dispatch(StackActions.replace("onBoard"));
+      }
+      setMilestones(parsed);
     } catch (error) {
       console.log("Error loading data:", error);
     }
   };
 
-  const memoryOption = (option: MemoryOptionType, id: string) => {
+  const milestoneOption = (option: MilestoneOptionType, id: string) => {
     switch (option) {
       case "add":
         setActiveId(null);
@@ -84,17 +93,20 @@ export default function HomeScreen() {
     }
   };
 
-  const saveMemories = async (newMemories: Memory[]) => {
-    setMemories(newMemories);
-    await AsyncStorage.setItem(memoryKeyStore, JSON.stringify(newMemories));
+  const saveMilestone = async (updatedMilestone: Milestone[]) => {
+    setMilestones(updatedMilestone);
+    await AsyncStorage.setItem(
+      milestoneKeyStore,
+      JSON.stringify(updatedMilestone)
+    );
   };
 
   const deleteSlide = (id: string) => {
-    if (memories.length != 1) {
-      const updated = memories.filter((s) => s.id !== id);
-      saveMemories(updated);
+    if (milestones.length != 1) {
+      const updated = milestones.filter((s) => s.id !== id);
+      saveMilestone(updated);
     } else {
-      Alert.alert("Deletion Denied", "Atleat one memory is needed");
+      Alert.alert("Deletion Denied", "Atleat one milestone is needed");
     }
   };
 
@@ -102,7 +114,7 @@ export default function HomeScreen() {
     setDateFormatIndex((prev) => (prev + 1) % DATE_FORMATS.length);
   };
 
-  const renderItem = ({ item, drag }: RenderItemParams<Memory>) => {
+  const renderItem = ({ item, drag }: RenderItemParams<Milestone>) => {
     return (
       <TouchableOpacity
         style={{ height, width }}
@@ -145,8 +157,10 @@ export default function HomeScreen() {
           </View>
 
           {/* Delete Button */}
-          <MemoryOptions onSelect={(type) => memoryOption(type, item.id)} />
-          <MemoryModel
+          <MilestoneOptions
+            onSelect={(type) => milestoneOption(type, item.id)}
+          />
+          <MilestoneModel
             visible={model}
             id={activeId}
             onClose={() => {
@@ -162,12 +176,12 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.container, animatedStyle]}>
-        {memories.length > 0 ? (
+        {milestones.length > 0 ? (
           <DraggableFlatList
-            data={memories}
+            data={milestones}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
-            onDragEnd={({ data }) => saveMemories(data)}
+            onDragEnd={({ data }) => saveMilestone(data)}
             pagingEnabled
             snapToInterval={height}
             decelerationRate="fast"

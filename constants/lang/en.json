@@ -36,6 +36,10 @@
     "noTodo": "Hey, share some fun ideas to do together!",
     "addNewTodo": "Add new Bucket List"
   },
+  "Milestone": {
+    "addMilestone": "Add new Milestone",
+    "editMilestone": "Edit Milestone"
+  },
   "Setting": {
     "settings": "Settings",
     "deleteAccount": "Delete Account",

@@ -12,19 +12,19 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-export type MemoryOptionType = "add" | "edit" | "delete";
+export type MilestoneOptionType = "add" | "edit" | "delete";
 
-const iconList: { icon: any; fn: MemoryOptionType }[] = [
+const iconList: { icon: any; fn: MilestoneOptionType }[] = [
   { icon: "plus-square", fn: "add" },
   { icon: "edit", fn: "edit" },
   { icon: "trash", fn: "delete" },
 ];
 
 interface Props {
-  onSelect: (text: MemoryOptionType) => void;
+  onSelect: (text: MilestoneOptionType) => void;
 }
 
-const MemoryOptions: React.FC<Props> = ({ onSelect }) => {
+const MilestoneOptions: React.FC<Props> = ({ onSelect }) => {
   const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
 
@@ -153,4 +153,4 @@ const createStyles = (themeName: ThemeName) => {
     },
   });
 };
-export default MemoryOptions;
+export default MilestoneOptions;

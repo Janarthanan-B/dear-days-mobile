@@ -1,6 +1,6 @@
 import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
-import { Memory } from "@/data/Memory";
+import { Milestone } from "@/data/Milestone";
 import { useTheme } from "@/hooks/ThemeContext";
 import { pickImage } from "@/utils/ImagePicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,8 +16,8 @@ interface Props {
   onClose: () => void;
 }
 
-const MemoryModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
-  const [memories, setMemories] = useState<Memory[]>([]);
+const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [photo, setPhoto] = useState<string>("");
@@ -25,7 +25,7 @@ const MemoryModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
 
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
-  const memoryKeyStore = "@memories";
+  const milestoneKeyStore = "@milestones";
 
   useEffect(() => {
     if (visible) {
@@ -35,12 +35,12 @@ const MemoryModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
 
   const loadData = async () => {
     try {
-      const data = await AsyncStorage.getItem(memoryKeyStore);
+      const data = await AsyncStorage.getItem(milestoneKeyStore);
       const parsed = data ? JSON.parse(data) : [];
-      setMemories(parsed);
+      setMilestones(parsed);
 
       if (id) {
-        const match = parsed.find((m: Memory) => m.id === id);
+        const match = parsed.find((m: Milestone) => m.id === id);
         if (match) {
           setDescription(match.description);
           setDate(match.date);
@@ -66,32 +66,32 @@ const MemoryModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
 
   const handleSave = async () => {
     try {
-      let updatedMemories = [...memories];
+      let updatedMilestones = [...milestones];
 
       if (isAdd) {
-        const newMemory: Memory = {
+        const newMileStone: Milestone = {
           id: Date.now().toString().toString(),
           description,
           date,
           photo,
           createdAt: new Date().toISOString(),
         };
-        updatedMemories.push(newMemory);
+        updatedMilestones.push(newMileStone);
       } else {
-        updatedMemories = updatedMemories.map((m) =>
+        updatedMilestones = updatedMilestones.map((m) =>
           m.id === id ? { ...m, description, date, photo } : m
         );
       }
 
       await AsyncStorage.setItem(
-        memoryKeyStore,
-        JSON.stringify(updatedMemories)
+        milestoneKeyStore,
+        JSON.stringify(updatedMilestones)
       );
-      setMemories(updatedMemories);
+      setMilestones(updatedMilestones);
       resetFields();
       onClose();
     } catch (error) {
-      console.log("Error saving memory:", error);
+      console.log("Error saving Milestone:", error);
     }
   };
 
@@ -105,29 +105,33 @@ const MemoryModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
       <View style={styles.overlay}>
         <View style={styles.modalBox}>
           <Text style={styles.modalTitle}>
-            {isAdd ? text.Moment.addNew : text.Moment.editMemory}
+            {isAdd ? text.Milestone.addMilestone : text.Milestone.editMilestone}
           </Text>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <PrimaryTextField
-              placeholder={text.Moment.description}
-              value={description}
-              onChangeText={setDescription}
-              multiline={true}
-            />
-            <PrimaryTextField
-              placeholder={text.Moment.date}
-              value={date}
-              onChangeText={setDate}
-            />
+            <View style={styles.wrapper}>
+              <PrimaryTextField
+                placeholder={text.Moment.description}
+                value={description}
+                onChangeText={setDescription}
+                multiline={true}
+              />
+            </View>
+            <View style={styles.wrapper}>
+              <PrimaryTextField
+                placeholder={text.Moment.date}
+                value={date}
+                onChangeText={setDate}
+              />
+            </View>
 
             {photo ? (
               <View style={styles.imageContainer}>
                 <Image source={{ uri: photo }} style={styles.previewImg} />
               </View>
             ) : null}
-
-            <PrimaryButton title={text.Moment.addPhotos} onPress={pickData} />
-
+            <View style={styles.wrapper}>
+              <PrimaryButton title={text.Moment.addPhotos} onPress={pickData} />
+            </View>
             <View style={styles.actionBtn}>
               <View style={{ width: "50%", paddingRight: 5 }}>
                 <PrimaryButton
@@ -165,7 +169,6 @@ const createStyles = (themeName: ThemeName) => {
       backgroundColor: theme.backgroundPrimary,
       borderRadius: 20,
       padding: 24,
-      gap: 16,
     },
     modalTitle: {
       fontSize: 20,
@@ -177,6 +180,7 @@ const createStyles = (themeName: ThemeName) => {
     imageContainer: {
       flexDirection: "row",
       justifyContent: "center",
+      paddingBottom: 16,
     },
     previewImg: {
       width: 100,
@@ -189,7 +193,11 @@ const createStyles = (themeName: ThemeName) => {
       justifyContent: "center",
       alignItems: "center",
     },
+    wrapper: {
+      width: "100%",
+      paddingBottom: 16,
+    },
   });
 };
 
-export default MemoryModel;
+export default MilestoneModel;

@@ -1,5 +1,6 @@
 import text from "@/constants/text";
 import { Colors, ThemeName } from "@/constants/theme";
+import { Milestone } from "@/data/Milestone";
 import { useTheme } from "@/hooks/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackActions } from "@react-navigation/native";
@@ -18,6 +19,8 @@ type Props = NativeStackScreenProps<RootNavigatorParamsList, "onBoard">;
 const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
+  const milestoneKeyStore = "@milestones";
+
   const [name, setName] = useState("");
   const [partnerName, setPartnerName] = useState("");
   const [date, setDate] = useState("");
@@ -25,6 +28,17 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
   const onButtonClick = async () => {
     await AsyncStorage.setItem(`@userName`, name);
     await AsyncStorage.setItem(`@partnerName`, partnerName);
+    const newMileStone: Milestone = {
+      id: Date.now().toString().toString(),
+      description: "have been Together",
+      date,
+      photo: "",
+      createdAt: new Date().toISOString(),
+    };
+    await AsyncStorage.setItem(
+      milestoneKeyStore,
+      JSON.stringify([newMileStone])
+    );
     navigation.dispatch(StackActions.replace("register"));
   };
   return (

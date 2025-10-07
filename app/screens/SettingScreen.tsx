@@ -159,14 +159,14 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
             onPress={() => navigation.navigate("aboutUs")}
           >
             <Text style={styles.label}>{text.Terms.aboutUs}</Text>
-            <Ionicons name="arrow-forward" size={24} color={theme.primary} />
+            <Ionicons name="chevron-forward" size={24} color={theme.primary} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.segmentContainer}
             onPress={() => navigation.navigate("termsPolicy")}
           >
             <Text style={styles.label}>{text.Terms.terms_Policy}</Text>
-            <Ionicons name="arrow-forward" size={24} color={theme.primary} />
+            <Ionicons name="chevron-forward" size={24} color={theme.primary} />
           </TouchableOpacity>
         </View>
       </View>

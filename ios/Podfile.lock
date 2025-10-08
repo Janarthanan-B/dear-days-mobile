@@ -1985,7 +1985,7 @@ PODS:
     - React-utils (= 0.81.4)
     - ReactNativeDependencies
   - ReactNativeDependencies (0.81.4)
-  - ReactNativeUiLib (4.5.2):
+  - ReactNativeUiLib (4.3.2):
     - React
   - RNCAsyncStorage (2.2.0):
     - hermes-engine
@@ -2726,7 +2726,7 @@ SPEC CHECKSUMS:
   ReactCodegen: a15ad48730e9fb2a51a4c9f61fe1ed253dfcf10f
   ReactCommon: 149b6c05126f2e99f2ed0d3c63539369546f8cae
   ReactNativeDependencies: ed6d1e64802b150399f04f1d5728ec16b437251e
-  ReactNativeUiLib: 237cd5430e9569575778f228547d03c485b010de
+  ReactNativeUiLib: 4990e6d7c99b57513540f317b5fb560eacb8fbb5
   RNCAsyncStorage: 3a4f5e2777dae1688b781a487923a08569e27fe4
   RNDateTimePicker: 7dda2673bd2a6022ea8888fe669d735b2eac0b2d
   RNGestureHandler: 2914750df066d89bf9d8f48a10ad5f0051108ac3

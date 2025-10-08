@@ -15,7 +15,7 @@ export const Colors = {
     borderPrimary: "#BABABA",
 
     disable: "#49454F",
-
+    error: "#FF2C2C",
     overlay: "rgba(0,0,0,0.5)",
   },
   dark: {
@@ -34,6 +34,7 @@ export const Colors = {
     borderPrimary: "#BABABA",
 
     disable: "#49454F",
+    error: "#FF2C2C",
 
     overlay: "rgba(0,0,0,0.5)",
   },

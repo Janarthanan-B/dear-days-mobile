@@ -15,11 +15,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Switch } from "react-native-ui-lib";
-import PrimaryTextField from "../components/common/TextField";
+import PrimaryTextField from "../components/common/PrimaryTextField";
 import ScreenTemplate from "../components/templates/ScreenTemplate";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import CheckboxInput from "../components/common/CheckboxInput";
 import { MainNavigatorParamsList } from "../index";
 
 type Props = NativeStackScreenProps<MainNavigatorParamsList, "settings">;
@@ -144,11 +144,10 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
           </View>
           <View style={styles.segmentContainer}>
             <Text style={styles.label}>{text.Setting.enableNotification}</Text>
-            <Switch
-              value={notificationsEnabled}
-              onColor={theme.primary}
-              offColor={theme.disable}
-              onValueChange={async (value) => {
+            <CheckboxInput
+              checked={notificationsEnabled}
+              color={theme.primary}
+              onChange={async (value) => {
                 setNotificationsEnabled(value);
                 await AsyncStorage.setItem(
                   "@notificationsEnabled",

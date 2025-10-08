@@ -6,8 +6,8 @@ import { useTheme } from "@/hooks/ThemeContext";
 import { groupTodos } from "@/utils/DateUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Checkbox, TextField } from "react-native-ui-lib";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import CheckboxInput from "../components/common/CheckboxInput";
 import ScreenTemplate from "../components/templates/ScreenTemplate";
 
 const TodoScreen = () => {
@@ -104,12 +104,12 @@ const TodoScreen = () => {
 
     return (
       <View key={todo.id} style={styles.todoItem}>
-        <Checkbox
-          value={todo.completed}
-          onValueChange={() => toggleTodo(todo.id)}
-          color={theme.textPrimary}
+        <CheckboxInput
+          color={theme.backgroundPrimary}
+          checked={todo.completed}
+          onChange={() => toggleTodo(todo.id)}
         />
-        <TextField
+        <TextInput
           value={currentValue}
           onChangeText={(text) => handleEditChange(todo.id, text)}
           onSubmitEditing={() => handleEditSubmit(todo.id)}
@@ -117,7 +117,6 @@ const TodoScreen = () => {
           style={[styles.todoText, todo.completed && styles.completedText]}
           selectionColor={theme.textPrimary}
           placeholder=""
-          validateOnBlur={true}
         />
       </View>
     );
@@ -134,8 +133,12 @@ const TodoScreen = () => {
               {/* Input only for latest month (first index) */}
               {idx === 0 && group.title !== "Past Years" && (
                 <View style={styles.inputRow}>
-                  <Checkbox value={false} disabled color={theme.textPrimary} />
-                  <TextField
+                  <CheckboxInput
+                    color={theme.backgroundPrimary}
+                    checked={false}
+                    disabled
+                  />
+                  <TextInput
                     placeholder={text.Moment.addNewTodo}
                     value={value}
                     onChangeText={setValue}
@@ -154,15 +157,18 @@ const TodoScreen = () => {
       ) : (
         <View style={styles.container}>
           <View style={styles.inputRow}>
-            <Checkbox value={false} disabled color={theme.textPrimary} />
-            <TextField
+            <CheckboxInput
+              color={theme.backgroundPrimary}
+              checked={false}
+              disabled
+            />
+            <TextInput
               placeholder="Write and press Enter..."
               value={value}
               onChangeText={setValue}
               onSubmitEditing={addTodo}
               blurOnSubmit={false}
-              style={styles.input}
-              containerStyle={{ maxHeight: 60, width: "100%" }}
+              style={[styles.input, { maxHeight: 60, width: "100%" }]}
               selectionColor={theme.textPrimary}
             />
           </View>

@@ -11,7 +11,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import CoupleFloatingBallons from "../../assets/images/couple-floating-balloons.svg";
 import PrimaryButton from "../components/common/PrimaryButton";
 import PrimaryDateField from "../components/common/PrimaryDateField";
-import PrimaryTextField from "../components/common/TextField";
+import PrimaryTextField from "../components/common/PrimaryTextField";
 import { RootNavigatorParamsList } from "../index";
 
 const { width, height } = Dimensions.get("screen");
@@ -52,11 +52,13 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
             placeholder={text.OnBoard.yourName}
             value={name}
             onChangeText={setName}
+            required
           />
           <PrimaryTextField
             placeholder={text.OnBoard.yourPartnerName}
             value={partnerName}
             onChangeText={setPartnerName}
+            required
           />
           <PrimaryDateField
             placeholder={text.OnBoard.whenTogether}

@@ -5,11 +5,10 @@ import { useTheme } from "@/hooks/ThemeContext";
 import { pickImage } from "@/utils/ImagePicker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { Image, Modal, ScrollView, StyleSheet } from "react-native";
-import { Text, View } from "react-native-ui-lib";
+import { Image, Modal, ScrollView, StyleSheet, Text, View } from "react-native";
 import PrimaryButton from "./common/PrimaryButton";
 import PrimaryDateField from "./common/PrimaryDateField";
-import PrimaryTextField from "./common/TextField";
+import PrimaryTextField from "./common/PrimaryTextField";
 
 interface Props {
   visible: boolean;
@@ -120,6 +119,7 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
                 placeholder={text.Milestone.description}
                 value={description}
                 onChangeText={setDescription}
+                required
               />
             </View>
             <View style={styles.wrapper}>

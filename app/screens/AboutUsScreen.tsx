@@ -38,7 +38,7 @@ const AboutUsScreen = () => {
         <TouchableOpacity
           style={styles.wrapper}
           onPress={() => {
-            Linking.openURL("https://www.linkedin.com/in/sandhya-nallusamy/");
+            Linking.openURL("https:www.behance.net/sandhyanallusamy");
           }}
         >
           <Ionicons name="logo-behance" size={24} color={theme.textSecondary} />
@@ -49,7 +49,7 @@ const AboutUsScreen = () => {
         <TouchableOpacity
           style={styles.wrapper}
           onPress={() => {
-            Linking.openURL("www.linkedin.com/in/janarthanan-developer");
+            Linking.openURL("https:www.linkedin.com/in/janarthanan-developer");
           }}
         >
           <Ionicons

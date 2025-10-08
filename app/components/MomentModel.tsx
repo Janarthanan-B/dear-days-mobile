@@ -12,12 +12,13 @@ import {
   Modal,
   ScrollView,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { Text, View } from "react-native-ui-lib";
 import PrimaryButton from "./common/PrimaryButton";
 import PrimaryDateField from "./common/PrimaryDateField";
-import PrimaryTextField from "./common/TextField";
+import PrimaryTextField from "./common/PrimaryTextField";
 
 interface Props {
   visible: boolean;
@@ -159,6 +160,7 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
                 placeholder={text.Moment.fieldTitle}
                 value={title}
                 onChangeText={setTitle}
+                required
               />
             </View>
             <View style={styles.wrapper}>

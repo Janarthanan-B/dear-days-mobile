@@ -5,8 +5,14 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
-import { Dimensions, Platform, Pressable, StyleSheet } from "react-native";
-import { TextField } from "react-native-ui-lib";
+import {
+  Dimensions,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 interface PrimaryDateFieldProps {
   value: string;
@@ -19,10 +25,9 @@ const screenWidth = Dimensions.get("window").width;
 const PrimaryDateField: React.FC<PrimaryDateFieldProps> = ({
   value,
   onChange,
-  placeholder = "Select Date",
+  placeholder,
 }) => {
-  const { themeName } = useTheme();
-  const theme = Colors[themeName];
+  const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
 
   const [showPicker, setShowPicker] = useState(false);
@@ -37,23 +42,15 @@ const PrimaryDateField: React.FC<PrimaryDateFieldProps> = ({
 
   return (
     <>
-      <TextField
-        label={placeholder}
-        containerStyle={styles.container}
-        value={value}
-        editable={false}
-        labelColor={theme.textPrimary}
-        labelStyle={styles.label}
-        fieldStyle={styles.fieldStyle}
-        style={styles.input}
-        placeholderTextColor={theme.textSecondary}
-        trailingAccessory={
+      <View style={styles.fieldStyleContainer}>
+        <Text style={styles.label}>{placeholder}</Text>
+        <View style={styles.inputFieldContainer}>
+          <Text style={styles.text}>{value}</Text>
           <Pressable onPress={() => setShowPicker(true)} hitSlop={10}>
             <Ionicons name="calendar" size={22} color={theme.textPrimary} />
           </Pressable>
-        }
-      />
-
+        </View>
+      </View>
       {showPicker && (
         <DateTimePicker
           value={value ? new Date(value) : new Date()}
@@ -69,31 +66,39 @@ const PrimaryDateField: React.FC<PrimaryDateFieldProps> = ({
 const createStyles = (themeName: ThemeName) => {
   const theme = Colors[themeName];
   return StyleSheet.create({
-    container: {
-      width: "100%",
-      maxHeight: 60,
-      maxWidth: screenWidth - 90,
-    },
-    input: {
-      height: 36,
-      fontSize: 16,
-      fontFamily: "Roboto_300Light",
-      letterSpacing: 0,
-      color: theme.textSecondary,
-    },
     label: {
       fontFamily: "Roboto_500Medium",
       letterSpacing: 0,
       fontSize: 16,
-      paddingBottom: 8,
+      paddingBottom: 6,
+      textAlign: "left",
+      color: theme.textPrimary,
     },
-    fieldStyle: {
+    fieldStyleContainer: {
+      width: "100%",
+      maxWidth: screenWidth - 90,
+      height: 60,
+    },
+    inputFieldContainer: {
+      width: "100%",
+      maxWidth: screenWidth - 90,
       borderWidth: 1,
-      borderColor: theme.borderPrimary,
       borderRadius: 12,
-      paddingHorizontal: 8,
+
+      paddingHorizontal: 6,
+      color: theme.textSecondary,
+      borderColor: theme.borderPrimary,
+      height: 36,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    text: {
+      fontFamily: "Roboto_300Light",
+      letterSpacing: 0,
+      fontSize: 16,
+      textAlign: "left",
     },
   });
 };
-
 export default PrimaryDateField;

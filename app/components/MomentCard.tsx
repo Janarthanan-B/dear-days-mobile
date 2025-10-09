@@ -3,55 +3,54 @@ import { Moment } from "@/data/Moment";
 import { useTheme } from "@/hooks/ThemeContext";
 import React from "react";
 import {
+  FlatList,
   ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
-import { Carousel } from "react-native-ui-lib";
 
 interface Props {
   onSelect: (id: string) => void;
   item: Moment;
 }
+
+const { width } = Dimensions.get("window");
+
 const MomentCard: React.FC<Props> = ({ item, onSelect }) => {
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
+
   return (
     <View style={styles.container}>
       <View style={styles.imageSection}>
         <Text style={styles.dateText}>{item.date}</Text>
-        <Carousel
-          containerStyle={{
-            height: "100%",
-            width: "100%",
-          }}
-          pageControlProps={{
-            size: 10,
-            containerStyle: styles.loopCarousel,
-          }}
-          //pageControlPosition={Carousel.pageControlPositions.OVER}
-          showCounter
-        >
-          {item.photos?.map((uri, i) => {
-            return (
-              <ImageBackground
-                source={{ uri }}
-                resizeMode="cover"
-                key={i}
-                style={styles.previewImg}
-              />
-            );
-          })}
-        </Carousel>
+
+        {/* Native horizontal image slider */}
+        <FlatList
+          data={item.photos || []}
+          keyExtractor={(uri, index) => `${uri}-${index}`}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item: uri }) => (
+            <ImageBackground
+              source={{ uri }}
+              resizeMode="cover"
+              style={[styles.previewImg, { width }]}
+            />
+          )}
+        />
       </View>
+
       <TouchableOpacity
         style={styles.contentSection}
         onPress={() => onSelect(item.id)}
       >
         <Text style={styles.title}>{item.title}</Text>
-        {item.description != "" && (
+        {item.description !== "" && (
           <Text style={styles.description} numberOfLines={3}>
             {item.description}
           </Text>
@@ -96,35 +95,8 @@ const createStyles = (themeName: ThemeName) => {
       padding: 4,
       borderRadius: 12,
     },
-    imagePlaceholder: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-around",
-      width: "60%",
-    },
-    iconTriangle: {
-      width: 0,
-      height: 0,
-      borderLeftWidth: 15,
-      borderRightWidth: 15,
-      borderBottomWidth: 25,
-      borderStyle: "solid",
-      borderLeftColor: "transparent",
-      borderRightColor: "transparent",
-      borderBottomColor: "#9E9E9E",
-    },
-    iconStar: {
-      width: 30,
-      height: 30,
-      backgroundColor: "#9E9E9E",
-      transform: [{ rotate: "45deg" }],
-      position: "relative",
-    },
-    iconSquare: {
-      width: 25,
-      height: 25,
-      backgroundColor: "#9E9E9E",
-      borderRadius: 4,
+    previewImg: {
+      height: 160,
     },
     contentSection: {
       padding: 15,
@@ -135,7 +107,6 @@ const createStyles = (themeName: ThemeName) => {
       fontFamily: "Roboto_500Medium",
       fontSize: 16,
       color: theme.primary,
-
       textAlign: "center",
     },
     description: {
@@ -145,12 +116,6 @@ const createStyles = (themeName: ThemeName) => {
       fontSize: 16,
       color: theme.textPrimary,
       paddingTop: 8,
-    },
-    loopCarousel: {
-      position: "absolute",
-    },
-    previewImg: {
-      flex: 1,
     },
   });
 };

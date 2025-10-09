@@ -2,7 +2,14 @@
 import { Colors, ThemeName } from "@/constants/theme";
 import { useTheme } from "@/hooks/ThemeContext";
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Platform,
+} from "react-native";
 
 interface CustomTextFieldProps {
   value: string;
@@ -94,6 +101,7 @@ const createStyles = (themeName: ThemeName) => {
     },
     inputFieldContainer: {
       width: "100%",
+      height: "100%",
       maxWidth: screenWidth - 90,
       borderWidth: 1,
       borderRadius: 12,
@@ -102,6 +110,13 @@ const createStyles = (themeName: ThemeName) => {
       fontSize: 16,
       paddingHorizontal: 6,
       color: theme.textSecondary,
+      paddingBottom: 0,
+      ...Platform.select({
+        android: {
+          top: 0,
+          paddingTop: 0,
+        },
+      }),
     },
   });
 };

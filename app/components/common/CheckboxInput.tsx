@@ -42,7 +42,7 @@ const CheckboxInput: React.FC<Props> = ({
       testID={testID}
     >
       <MaterialCommunityIcons
-        name={iconName as any}
+        name={checked ? "checkbox-marked" : "checkbox-blank-outline"}
         size={24}
         color={disabled ? theme.textInfo : color}
       />

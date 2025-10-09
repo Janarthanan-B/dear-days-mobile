@@ -6,7 +6,14 @@ import { useTheme } from "@/hooks/ThemeContext";
 import { groupTodos } from "@/utils/DateUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import CheckboxInput from "../components/common/CheckboxInput";
 import ScreenTemplate from "../components/templates/ScreenTemplate";
 
@@ -105,7 +112,7 @@ const TodoScreen = () => {
     return (
       <View key={todo.id} style={styles.todoItem}>
         <CheckboxInput
-          color={theme.backgroundPrimary}
+          color={theme.textPrimary}
           checked={todo.completed}
           onChange={() => toggleTodo(todo.id)}
         />
@@ -134,7 +141,7 @@ const TodoScreen = () => {
               {idx === 0 && group.title !== "Past Years" && (
                 <View style={styles.inputRow}>
                   <CheckboxInput
-                    color={theme.backgroundPrimary}
+                    color={theme.textPrimary}
                     checked={false}
                     disabled
                   />
@@ -157,18 +164,14 @@ const TodoScreen = () => {
       ) : (
         <View style={styles.container}>
           <View style={styles.inputRow}>
-            <CheckboxInput
-              color={theme.backgroundPrimary}
-              checked={false}
-              disabled
-            />
+            <CheckboxInput color={theme.textPrimary} checked={false} disabled />
             <TextInput
               placeholder="Write and press Enter..."
               value={value}
               onChangeText={setValue}
               onSubmitEditing={addTodo}
               blurOnSubmit={false}
-              style={[styles.input, { maxHeight: 60, width: "100%" }]}
+              style={[styles.input]}
               selectionColor={theme.textPrimary}
             />
           </View>
@@ -182,17 +185,26 @@ const createStyles = (themeName: ThemeName) => {
   const theme = Colors[themeName];
   return StyleSheet.create({
     todoItem: {
+      width: "100%",
       flexDirection: "row",
       alignItems: "center",
-      paddingVertical: 6,
+      marginBottom: 6,
     },
     todoText: {
+      width: "100%",
       fontSize: 16,
-      color: theme.textPrimary,
-      textAlign: "center",
       fontFamily: "Roboto_300Light",
       letterSpacing: 0,
+      color: theme.textPrimary,
       marginLeft: 6,
+      height: "100%",
+      ...Platform.select({
+        android: {
+          top: 0,
+          padding: 0,
+          paddingBottom: 2,
+        },
+      }),
     },
     completedText: {
       textDecorationLine: "line-through",
@@ -219,12 +231,20 @@ const createStyles = (themeName: ThemeName) => {
       marginBottom: 6,
     },
     input: {
-      height: 30,
+      width: "100%",
       fontSize: 16,
       fontFamily: "Roboto_300Light",
       letterSpacing: 0,
       color: theme.textSecondary,
       marginLeft: 6,
+      height: "100%",
+      ...Platform.select({
+        android: {
+          top: 0,
+          padding: 0,
+          paddingBottom: 2,
+        },
+      }),
     },
   });
 };

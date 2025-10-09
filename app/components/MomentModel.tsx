@@ -90,12 +90,8 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
   };
 
   const deleteSlide = () => {
-    if (moments.length != 1) {
-      const updatedMoments = moments.filter((s) => s.id !== id);
-      saveMoment(updatedMoments);
-    } else {
-      Alert.alert("Deletion Denied", "Atleat one memory is needed");
-    }
+    const updatedMoments = moments.filter((s) => s.id !== id);
+    saveMoment(updatedMoments);
   };
 
   const handleSave = async () => {

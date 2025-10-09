@@ -64,7 +64,7 @@ Notifications.setNotificationHandler({
 });
 
 export default function Index() {
-  const momentKeyStore = "@memories";
+  const milestoneKeyStore = "@milestones";
   const [screen, SetScreen] = useState<"splash" | "main">("splash");
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function Index() {
   }, []);
 
   const loadData = async () => {
-    const data = await AsyncStorage.getItem(momentKeyStore);
+    const data = await AsyncStorage.getItem(milestoneKeyStore);
     const storedNotifications = await AsyncStorage.getItem(
       "@notificationsEnabled"
     );
@@ -81,8 +81,8 @@ export default function Index() {
       if (JSON.parse(storedNotifications)) {
         registerForPushNotificationsAsync().then(() => {
           scheduleDailyNotification(
-            17,
-            30,
+            9,
+            0,
             JSON.parse(data)[0].description,
             JSON.parse(data)[0].description
           );

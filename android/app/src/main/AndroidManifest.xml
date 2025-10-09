@@ -26,7 +26,6 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="deardays"/>
-        <data android:scheme="exp+dear-days"/>
       </intent-filter>
     </activity>
   </application>

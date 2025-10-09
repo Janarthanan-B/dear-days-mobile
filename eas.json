@@ -7,22 +7,36 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      },
       "env": {
         "NODE_ENV": "development"
       }
     },
     "preview": {
       "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "NODE_ENV": "production"
       }
     },
     "production": {
       "autoIncrement": true,
-      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle"
+      },
       "env": {
         "NODE_ENV": "production"
       }
     }
+  },
+  "submit": {
+    "production": {}
   }
 }

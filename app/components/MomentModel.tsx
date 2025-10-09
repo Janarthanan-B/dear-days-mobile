@@ -19,6 +19,7 @@ import {
 import PrimaryButton from "./common/PrimaryButton";
 import PrimaryDateField from "./common/PrimaryDateField";
 import PrimaryTextField from "./common/PrimaryTextField";
+import PrimaryLoader from "./common/CoupleLoader";
 
 interface Props {
   visible: boolean;
@@ -33,6 +34,7 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [photos, setPhotos] = useState<string[]>([]);
   const [isAdd, setIsAdd] = useState<boolean>(id == null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { themeName, theme } = useTheme();
   const styles = createStyles(themeName);
@@ -65,6 +67,7 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
         setIsAdd(true);
         resetFields();
       }
+      setIsLoading(false);
     } catch (error) {
       console.log("Error loading moments:", error);
     }
@@ -153,72 +156,75 @@ const MomentModal: React.FC<Props> = ({ visible, id = null, onClose }) => {
               <></>
             )}
           </View>
-
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.wrapper}>
-              <PrimaryTextField
-                placeholder={text.Moment.fieldTitle}
-                value={title}
-                onChangeText={setTitle}
-                required
-              />
-            </View>
-            <View style={styles.wrapper}>
-              <PrimaryTextField
-                placeholder={text.Moment.description}
-                value={description}
-                onChangeText={setDescription}
-                multiline={true}
-              />
-            </View>
-            <View style={styles.wrapper}>
-              <PrimaryDateField
-                placeholder={text.Moment.date}
-                value={date}
-                onChange={setDate}
-              />
-            </View>
-            {photos.length > 0 && (
-              <View style={styles.imageContainer}>
-                {photos.map((uri, idx) => (
-                  <View key={idx} style={styles.imageWrapper}>
-                    <Image source={{ uri }} style={styles.previewImg} />
-                    <TouchableOpacity
-                      style={styles.deleteIcon}
-                      onPress={() => handleDeletePhoto(idx)}
-                    >
-                      <Ionicons
-                        name="close-circle"
-                        size={20}
-                        color={theme.primary}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </View>
-            )}
-            <View style={styles.wrapper}>
-              <PrimaryButton
-                title={text.Moment.addPhotos}
-                onPress={pickImage}
-              />
-            </View>
-            <View style={styles.actionBtn}>
-              <View style={{ width: "50%", paddingRight: 5 }}>
-                <PrimaryButton
-                  title={text.Navigation.cancel}
-                  onPress={handleClose}
-                  secondary
+          {isLoading ? (
+            <PrimaryLoader />
+          ) : (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.wrapper}>
+                <PrimaryTextField
+                  placeholder={text.Moment.fieldTitle}
+                  value={title}
+                  onChangeText={setTitle}
+                  required
                 />
               </View>
-              <View style={{ width: "50%", paddingLeft: 5 }}>
-                <PrimaryButton
-                  title={text.Navigation.save}
-                  onPress={handleSave}
+              <View style={styles.wrapper}>
+                <PrimaryTextField
+                  placeholder={text.Moment.description}
+                  value={description}
+                  onChangeText={setDescription}
+                  multiline={true}
                 />
               </View>
-            </View>
-          </ScrollView>
+              <View style={styles.wrapper}>
+                <PrimaryDateField
+                  placeholder={text.Moment.date}
+                  value={date}
+                  onChange={setDate}
+                />
+              </View>
+              {photos.length > 0 && (
+                <View style={styles.imageContainer}>
+                  {photos.map((uri, idx) => (
+                    <View key={idx} style={styles.imageWrapper}>
+                      <Image source={{ uri }} style={styles.previewImg} />
+                      <TouchableOpacity
+                        style={styles.deleteIcon}
+                        onPress={() => handleDeletePhoto(idx)}
+                      >
+                        <Ionicons
+                          name="close-circle"
+                          size={20}
+                          color={theme.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+              <View style={styles.wrapper}>
+                <PrimaryButton
+                  title={text.Moment.addPhotos}
+                  onPress={pickImage}
+                />
+              </View>
+              <View style={styles.actionBtn}>
+                <View style={{ width: "50%", paddingRight: 5 }}>
+                  <PrimaryButton
+                    title={text.Navigation.cancel}
+                    onPress={handleClose}
+                    secondary
+                  />
+                </View>
+                <View style={{ width: "50%", paddingLeft: 5 }}>
+                  <PrimaryButton
+                    title={text.Navigation.save}
+                    onPress={handleSave}
+                  />
+                </View>
+              </View>
+            </ScrollView>
+          )}
         </View>
       </View>
     </Modal>

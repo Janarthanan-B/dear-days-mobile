@@ -9,6 +9,7 @@ import { Image, Modal, ScrollView, StyleSheet, Text, View } from "react-native";
 import PrimaryButton from "./common/PrimaryButton";
 import PrimaryDateField from "./common/PrimaryDateField";
 import PrimaryTextField from "./common/PrimaryTextField";
+import PrimaryLoader from "./common/CoupleLoader";
 
 interface Props {
   visible: boolean;
@@ -24,6 +25,7 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
   const [isAdd, setIsAdd] = useState<boolean>(id == null);
   const [userName, setUserName] = useState("");
   const [partnerName, setPartnerName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
@@ -54,6 +56,7 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
           setIsAdd(false);
         }
       }
+      setIsLoading(false);
     } catch (error) {
       console.log("Error loading data:", error);
     }
@@ -113,58 +116,65 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
           <Text style={styles.modalTitle}>
             {isAdd ? text.Milestone.addMilestone : text.Milestone.editMilestone}
           </Text>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.wrapper}>
-              <PrimaryTextField
-                placeholder={text.Milestone.description}
-                value={description}
-                onChangeText={setDescription}
-                required
-              />
-            </View>
-            <View style={styles.wrapper}>
-              <PrimaryDateField
-                placeholder={text.Milestone.date}
-                value={date}
-                onChange={setDate}
-              />
-            </View>
+          {isLoading ? (
+            <PrimaryLoader />
+          ) : (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.wrapper}>
+                <PrimaryTextField
+                  placeholder={text.Milestone.description}
+                  value={description}
+                  onChangeText={setDescription}
+                  required
+                />
+              </View>
+              <View style={styles.wrapper}>
+                <PrimaryDateField
+                  placeholder={text.Milestone.date}
+                  value={date}
+                  onChange={setDate}
+                />
+              </View>
 
-            {photo ? (
-              <View style={styles.imageContainer}>
-                <Image source={{ uri: photo }} style={styles.previewImg} />
-              </View>
-            ) : null}
-            <View style={styles.wrapper}>
-              <PrimaryButton title={text.Moment.addPhotos} onPress={pickData} />
-            </View>
-            <View style={styles.actionBtn}>
-              <View style={{ width: "50%", paddingRight: 5 }}>
+              {photo ? (
+                <View style={styles.imageContainer}>
+                  <Image source={{ uri: photo }} style={styles.previewImg} />
+                </View>
+              ) : null}
+              <View style={styles.wrapper}>
                 <PrimaryButton
-                  title={text.Navigation.cancel}
-                  onPress={handleClose}
-                  secondary
+                  title={text.Moment.addPhotos}
+                  onPress={pickData}
                 />
               </View>
-              <View style={{ width: "50%", paddingLeft: 5 }}>
-                <PrimaryButton
-                  title={text.Navigation.save}
-                  onPress={handleSave}
-                  disabled={description == "" || date == ""}
-                />
+              <View style={styles.actionBtn}>
+                <View style={{ width: "50%", paddingRight: 5 }}>
+                  <PrimaryButton
+                    title={text.Navigation.cancel}
+                    onPress={handleClose}
+                    secondary
+                  />
+                </View>
+                <View style={{ width: "50%", paddingLeft: 5 }}>
+                  <PrimaryButton
+                    title={text.Navigation.save}
+                    onPress={handleSave}
+                    disabled={description == "" || date == ""}
+                  />
+                </View>
               </View>
-            </View>
-            <View style={styles.card}>
-              {userName != "" && partnerName != "" && (
-                <Text style={styles.title}>
-                  {userName} & {partnerName}
+              <View style={styles.card}>
+                {userName != "" && partnerName != "" && (
+                  <Text style={styles.title}>
+                    {userName} & {partnerName}
+                  </Text>
+                )}
+                <Text style={styles.subtitle}>
+                  have been {description} | {date}
                 </Text>
-              )}
-              <Text style={styles.subtitle}>
-                have been {description} | {date}
-              </Text>
-            </View>
-          </ScrollView>
+              </View>
+            </ScrollView>
+          )}
         </View>
       </View>
     </Modal>

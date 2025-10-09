@@ -59,7 +59,7 @@ export default function HomeScreen() {
   });
   useEffect(() => {
     loadData();
-  }, []);
+  });
 
   const loadData = async () => {
     try {

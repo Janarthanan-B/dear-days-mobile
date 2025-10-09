@@ -21,6 +21,7 @@ import ScreenTemplate from "../components/templates/ScreenTemplate";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import CheckboxInput from "../components/common/CheckboxInput";
 import { MainNavigatorParamsList } from "../index";
+import PrimaryLoader from "../components/common/CoupleLoader";
 
 type Props = NativeStackScreenProps<MainNavigatorParamsList, "settings">;
 
@@ -32,6 +33,7 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
   const [userName, setUserName] = useState("");
   const [partnerName, setPartnerName] = useState("");
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadData();
@@ -51,6 +53,7 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
       if (storedNotifications)
         setNotificationsEnabled(JSON.parse(storedNotifications));
       if (storedProfileImage) setProfileImage(storedProfileImage);
+      setIsLoading(false);
     } catch (error) {
       console.log("Error loading data:", error);
     }
@@ -94,87 +97,105 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <ScreenTemplate title={text.Setting.settings}>
-      <View style={styles.container}>
-        <View
-          style={[
-            styles.detailContainer,
-            { backgroundColor: theme.backgroundSplash, marginBottom: 24 },
-          ]}
-        >
-          <Text style={styles.logoText}>DD</Text>
-        </View>
-        <View style={styles.detailContainer}>
-          <View style={styles.profileContainer}>
-            <View style={styles.profileImageWrapper}>
-              <Image
-                source={
-                  profileImage
-                    ? { uri: profileImage }
-                    : require("../../assets/icon/default_profile_icon.png")
-                }
-                style={styles.profileImage}
-                borderRadius={60}
-              />
+      {isLoading ? (
+        <PrimaryLoader />
+      ) : (
+        <>
+          <View style={styles.container}>
+            <View
+              style={[
+                styles.detailContainer,
+                { backgroundColor: theme.backgroundSplash, marginBottom: 24 },
+              ]}
+            >
+              <Text style={styles.logoText}>DD</Text>
+            </View>
+            <View style={styles.detailContainer}>
+              <View style={styles.profileContainer}>
+                <View style={styles.profileImageWrapper}>
+                  <Image
+                    source={
+                      profileImage
+                        ? { uri: profileImage }
+                        : require("../../assets/icon/default_profile_icon.png")
+                    }
+                    style={styles.profileImage}
+                    borderRadius={60}
+                  />
+                  <TouchableOpacity
+                    style={styles.editIconContainer}
+                    onPress={pickData}
+                  >
+                    <Image
+                      source={require("../../assets/icon/edit_circle_icon.png")}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.segmentContainer}>
+                <PrimaryTextField
+                  placeholder={text.OnBoard.yourName}
+                  value={userName}
+                  onChangeText={(value) => handleTextChange("userName", value)}
+                  required
+                />
+              </View>
+              <View style={styles.segmentContainer}>
+                <PrimaryTextField
+                  placeholder={text.OnBoard.yourPartnerName}
+                  value={partnerName}
+                  onChangeText={(value) =>
+                    handleTextChange("partnerName", value)
+                  }
+                  required
+                />
+              </View>
+              <View style={styles.segmentContainer}>
+                <Text style={styles.label}>
+                  {text.Setting.enableNotification}
+                </Text>
+                <CheckboxInput
+                  checked={notificationsEnabled}
+                  color={theme.primary}
+                  onChange={async (value) => {
+                    setNotificationsEnabled(value);
+                    await AsyncStorage.setItem(
+                      "@notificationsEnabled",
+                      JSON.stringify(value)
+                    );
+                  }}
+                />
+              </View>
               <TouchableOpacity
-                style={styles.editIconContainer}
-                onPress={pickData}
+                style={styles.segmentContainer}
+                onPress={() => navigation.navigate("aboutUs")}
               >
-                <Image
-                  source={require("../../assets/icon/edit_circle_icon.png")}
-                  style={styles.icon}
+                <Text style={styles.label}>{text.Terms.aboutUs}</Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={24}
+                  color={theme.primary}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.segmentContainer}
+                onPress={() => navigation.navigate("termsPolicy")}
+              >
+                <Text style={styles.label}>{text.Terms.terms_Policy}</Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={24}
+                  color={theme.primary}
                 />
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.segmentContainer}>
-            <PrimaryTextField
-              placeholder={text.OnBoard.yourName}
-              value={userName}
-              onChangeText={(value) => handleTextChange("userName", value)}
-              required
-            />
-          </View>
-          <View style={styles.segmentContainer}>
-            <PrimaryTextField
-              placeholder={text.OnBoard.yourPartnerName}
-              value={partnerName}
-              onChangeText={(value) => handleTextChange("partnerName", value)}
-              required
-            />
-          </View>
-          <View style={styles.segmentContainer}>
-            <Text style={styles.label}>{text.Setting.enableNotification}</Text>
-            <CheckboxInput
-              checked={notificationsEnabled}
-              color={theme.primary}
-              onChange={async (value) => {
-                setNotificationsEnabled(value);
-                await AsyncStorage.setItem(
-                  "@notificationsEnabled",
-                  JSON.stringify(value)
-                );
-              }}
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.segmentContainer}
-            onPress={() => navigation.navigate("aboutUs")}
-          >
-            <Text style={styles.label}>{text.Terms.aboutUs}</Text>
-            <Ionicons name="chevron-forward" size={24} color={theme.primary} />
+          <TouchableOpacity style={styles.deleteButton} onPress={deleteAccount}>
+            <Text style={styles.deleteText}>{text.Setting.deleteAccount}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.segmentContainer}
-            onPress={() => navigation.navigate("termsPolicy")}
-          >
-            <Text style={styles.label}>{text.Terms.terms_Policy}</Text>
-            <Ionicons name="chevron-forward" size={24} color={theme.primary} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <TouchableOpacity style={styles.deleteButton} onPress={deleteAccount}>
-        <Text style={styles.deleteText}>{text.Setting.deleteAccount}</Text>
-      </TouchableOpacity>
+        </>
+      )}
     </ScreenTemplate>
   );
 };
@@ -182,6 +203,11 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
 const createStyles = (themeName: ThemeName) => {
   const theme = Colors[themeName];
   return StyleSheet.create({
+    loader: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
     container: {
       flex: 1,
     },

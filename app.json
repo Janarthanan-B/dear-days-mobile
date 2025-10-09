@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "dear-days",
+    "name": "Dear Days",
+    "displayName": "Dear Days",
     "slug": "dear-days",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/logo/dear_days.png",
     "scheme": "deardays",

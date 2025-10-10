@@ -5,7 +5,7 @@ import { useTheme } from "@/hooks/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import CoupleFloatingBallons from "../../assets/images/couple-floating-balloons.svg";
@@ -13,6 +13,7 @@ import PrimaryButton from "../components/common/PrimaryButton";
 import PrimaryDateField from "../components/common/PrimaryDateField";
 import PrimaryTextField from "../components/common/PrimaryTextField";
 import { RootNavigatorParamsList } from "../index";
+import { registerForPushNotificationsAsync } from "@/utils/Notification";
 
 const { width, height } = Dimensions.get("screen");
 type Props = NativeStackScreenProps<RootNavigatorParamsList, "onBoard">;
@@ -26,10 +27,20 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
   const [partnerName, setPartnerName] = useState("");
   const [date, setDate] = useState("");
 
+  useEffect(() => {
+    loadData();
+  }, []);
+  const loadData = async () => {
+    const granted = await registerForPushNotificationsAsync();
+    await AsyncStorage.setItem(
+      "@notificationsEnabled",
+      JSON.stringify(granted)
+    );
+  };
+
   const onButtonClick = async () => {
     await AsyncStorage.setItem(`@userName`, name);
     await AsyncStorage.setItem(`@partnerName`, partnerName);
-    await AsyncStorage.setItem("@notificationsEnabled", JSON.stringify(true));
     const newMileStone: Milestone = {
       id: Date.now().toString().toString(),
       description: "together",

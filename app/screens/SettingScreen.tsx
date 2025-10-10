@@ -10,6 +10,7 @@ import {
   Alert,
   Image,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -22,6 +23,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import CheckboxInput from "../components/common/CheckboxInput";
 import { MainNavigatorParamsList } from "../index";
 import PrimaryLoader from "../components/common/CoupleLoader";
+import { registerForPushNotificationsAsync } from "@/utils/Notification";
 
 type Props = NativeStackScreenProps<MainNavigatorParamsList, "settings">;
 
@@ -73,6 +75,23 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
     await AsyncStorage.setItem(`@${key}`, value);
   };
 
+  const toggleNotification = async (value: boolean) => {
+    if (value) {
+      const granted = await registerForPushNotificationsAsync();
+      setNotificationsEnabled(granted);
+      await AsyncStorage.setItem(
+        "@notificationsEnabled",
+        JSON.stringify(granted)
+      );
+    } else {
+      setNotificationsEnabled(value);
+      await AsyncStorage.setItem(
+        "@notificationsEnabled",
+        JSON.stringify(value)
+      );
+    }
+  };
+
   const deleteAccount = async () => {
     Alert.alert(
       "Delete Account",
@@ -100,16 +119,12 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
       {isLoading ? (
         <PrimaryLoader />
       ) : (
-        <>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
-            <View
-              style={[
-                styles.detailContainer,
-                { backgroundColor: theme.backgroundSplash, marginBottom: 24 },
-              ]}
-            >
-              <Text style={styles.logoText}>DD</Text>
-            </View>
+            <Image
+              source={require("../../assets/icon/setting_dd_icon.png")}
+              style={styles.settingIcon}
+            />
             <View style={styles.detailContainer}>
               <View style={styles.profileContainer}>
                 <View style={styles.profileImageWrapper}>
@@ -117,7 +132,7 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
                     source={
                       profileImage
                         ? { uri: profileImage }
-                        : require("../../assets/icon/default_profile_icon.png")
+                        : require("../../assets/images/default_profile.png")
                     }
                     style={styles.profileImage}
                     borderRadius={60}
@@ -158,13 +173,7 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
                 <CheckboxInput
                   checked={notificationsEnabled}
                   color={theme.primary}
-                  onChange={async (value) => {
-                    setNotificationsEnabled(value);
-                    await AsyncStorage.setItem(
-                      "@notificationsEnabled",
-                      JSON.stringify(value)
-                    );
-                  }}
+                  onChange={toggleNotification}
                 />
               </View>
               <TouchableOpacity
@@ -194,7 +203,7 @@ const SettingScreen: React.FC<Props> = ({ navigation }) => {
           <TouchableOpacity style={styles.deleteButton} onPress={deleteAccount}>
             <Text style={styles.deleteText}>{text.Setting.deleteAccount}</Text>
           </TouchableOpacity>
-        </>
+        </ScrollView>
       )}
     </ScreenTemplate>
   );
@@ -234,10 +243,16 @@ const createStyles = (themeName: ThemeName) => {
       width: 24,
       height: 24,
     },
+    settingIcon: {
+      width: "100%",
+      height: 100,
+      borderRadius: 20,
+      marginBottom: 16,
+    },
     detailContainer: {
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: theme.backgroundPrimary,
+      backgroundColor: theme.backgroundAlter,
       borderRadius: 20,
       gap: 16,
       paddingHorizontal: 8,

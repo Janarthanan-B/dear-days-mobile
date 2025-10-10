@@ -9,6 +9,10 @@
     "scheme": "deardays",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "notification": {
+      "icon": "./assets/logo/notification_icon.png",
+      "color": "#FFE9F6"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.janadev.deardays"
@@ -35,6 +39,14 @@
         {
           "image": "./assets/logo/dear_days.png",
           "backgroundColor": "#FFD5ED"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/logo/notification_icon.png",
+          "color": "#FFD5ED",
+          "defaultChannel": "default"
         }
       ],
       [

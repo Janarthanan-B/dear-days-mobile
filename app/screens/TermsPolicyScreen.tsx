@@ -32,7 +32,7 @@ const createStyles = (themeName: ThemeName) => {
       fontSize: 18,
       color: theme.textPrimary,
       textAlign: "justify",
-      fontFamily: "Roboto_500Medium",
+      fontFamily: "Roboto_300Light",
       paddingBottom: 12,
     },
     headlineSub: {

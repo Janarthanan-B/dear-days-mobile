@@ -27,7 +27,13 @@ const MomentsScreen = () => {
     try {
       const stored = await AsyncStorage.getItem(momentKeyStore);
       if (stored) {
-        setMoments(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        // Assuming your Moment has a `date` field like "2025-10-09" or timestamp
+        const sorted = parsed.sort(
+          (a: Moment, b: Moment) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        setMoments(sorted);
       }
     } catch (err) {
       console.log("Error loading moments", err);

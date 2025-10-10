@@ -7,6 +7,7 @@ import { groupTodos } from "@/utils/DateUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import {
+  ImageBackground,
   Platform,
   ScrollView,
   StyleSheet,
@@ -124,6 +125,7 @@ const TodoScreen = () => {
           style={[styles.todoText, todo.completed && styles.completedText]}
           selectionColor={theme.textPrimary}
           placeholder=""
+          placeholderTextColor={theme.textSecondary}
         />
       </View>
     );
@@ -153,6 +155,7 @@ const TodoScreen = () => {
                     blurOnSubmit={false}
                     style={styles.input}
                     selectionColor={theme.textPrimary}
+                    placeholderTextColor={theme.textSecondary}
                   />
                 </View>
               )}
@@ -162,20 +165,30 @@ const TodoScreen = () => {
           ))}
         </ScrollView>
       ) : (
-        <View style={styles.container}>
-          <View style={styles.inputRow}>
-            <CheckboxInput color={theme.textPrimary} checked={false} disabled />
-            <TextInput
-              placeholder="Write and press Enter..."
-              value={value}
-              onChangeText={setValue}
-              onSubmitEditing={addTodo}
-              blurOnSubmit={false}
-              style={[styles.input]}
-              selectionColor={theme.textPrimary}
-            />
+        <ImageBackground
+          source={require("../../assets/images/to-do-image.png")}
+          style={styles.container}
+        >
+          <View style={styles.container}>
+            <View style={styles.inputRow}>
+              <CheckboxInput
+                color={theme.textPrimary}
+                checked={false}
+                disabled
+              />
+              <TextInput
+                placeholder="Write and press Enter..."
+                value={value}
+                onChangeText={setValue}
+                onSubmitEditing={addTodo}
+                blurOnSubmit={false}
+                style={[styles.input]}
+                selectionColor={theme.textPrimary}
+                placeholderTextColor={theme.textSecondary}
+              />
+            </View>
           </View>
-        </View>
+        </ImageBackground>
       )}
     </ScreenTemplate>
   );

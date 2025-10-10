@@ -34,14 +34,22 @@ const MomentCard: React.FC<Props> = ({ item, onSelect }) => {
           keyExtractor={(uri, index) => `${uri}-${index}`}
           horizontal
           pagingEnabled
+          snapToAlignment="center"
+          decelerationRate="fast"
           showsHorizontalScrollIndicator={false}
           renderItem={({ item: uri }) => (
             <ImageBackground
               source={{ uri }}
               resizeMode="cover"
-              style={[styles.previewImg, { width }]}
+              style={styles.previewImg}
             />
           )}
+          getItemLayout={(data, index) => ({
+            length: width,
+            offset: width * index,
+            index,
+          })}
+          style={{ width }}
         />
       </View>
 
@@ -74,14 +82,6 @@ const createStyles = (themeName: ThemeName) => {
       elevation: 3,
       overflow: "hidden",
     },
-    imageSection: {
-      width: "100%",
-      height: 160,
-      backgroundColor: "#E0E0E0",
-      justifyContent: "center",
-      alignItems: "center",
-      position: "relative",
-    },
     dateText: {
       position: "absolute",
       top: 10,
@@ -96,8 +96,18 @@ const createStyles = (themeName: ThemeName) => {
       borderRadius: 12,
     },
     previewImg: {
+      width: width, // full screen width per slide
       height: 160,
     },
+    imageSection: {
+      width: width, // match FlatList width
+      height: 160,
+      backgroundColor: "#E0E0E0",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
+    },
+
     contentSection: {
       padding: 15,
       backgroundColor: theme.backgroundSecoundary,

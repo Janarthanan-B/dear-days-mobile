@@ -33,6 +33,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import AboutUsScreen from "./screens/AboutUsScreen";
 import TermsPolicyScreen from "./screens/TermsPolicyScreen";
+import {
+  registerForPushNotificationsAsync,
+  scheduleDailyNotification,
+} from "@/utils/Notification";
 
 export type RootNavigatorParamsList = {
   splash: undefined;
@@ -53,15 +57,6 @@ export type MainNavigatorParamsList = {
 
 const RootStack = createNativeStackNavigator<RootNavigatorParamsList>();
 const Drawer = createDrawerNavigator<MainNavigatorParamsList>();
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: false,
-    shouldShowList: false,
-  }),
-});
 
 export default function Index() {
   const milestoneKeyStore = "@milestones";
@@ -73,20 +68,23 @@ export default function Index() {
 
   const loadData = async () => {
     const data = await AsyncStorage.getItem(milestoneKeyStore);
-    const storedNotifications = await AsyncStorage.getItem(
-      "@notificationsEnabled"
-    );
-    if (data != null && storedNotifications != null) {
+    if (data != null) {
       SetScreen("main");
-      if (JSON.parse(storedNotifications)) {
-        registerForPushNotificationsAsync().then(() => {
-          scheduleDailyNotification(
-            9,
-            0,
-            JSON.parse(data)[0].description,
-            JSON.parse(data)[0].description
-          );
-        });
+      const granted = await registerForPushNotificationsAsync();
+      const storedNotifications = await AsyncStorage.getItem(
+        "@notificationsEnabled"
+      );
+      if (
+        granted &&
+        storedNotifications != null &&
+        JSON.parse(storedNotifications)
+      ) {
+        scheduleDailyNotification(
+          9,
+          0,
+          JSON.parse(data)[0].description,
+          JSON.parse(data)[0].description
+        );
       }
     }
   };
@@ -148,36 +146,3 @@ const MainStack = () => {
     </GestureHandlerRootView>
   );
 };
-
-const scheduleDailyNotification = async (
-  hour: number,
-  minute: number,
-  description: string,
-  date: string
-) => {
-  await Notifications.cancelAllScheduledNotificationsAsync(); // clear old
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: `You have been ${description} for ${getDaysTogether(date)}`,
-      body: ``,
-    },
-    trigger: {
-      hour,
-      minute,
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
-    },
-  });
-};
-
-// Request notification permission
-async function registerForPushNotificationsAsync() {
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-    });
-  }
-
-  const { status } = await Notifications.requestPermissionsAsync();
-  return status === "granted";
-}

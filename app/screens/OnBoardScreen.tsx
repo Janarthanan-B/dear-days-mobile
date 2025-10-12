@@ -43,7 +43,7 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
     await AsyncStorage.setItem(`@partnerName`, partnerName);
     const newMileStone: Milestone = {
       id: Date.now().toString().toString(),
-      description: "together",
+      description: "have been together",
       date,
       photo: "",
       createdAt: new Date().toISOString(),

@@ -54,7 +54,7 @@ export const groupTodos = (todos: Todo[]): TodoGroup[] => {
   return groups;
 };
 
-export const DATE_FORMATS = ["RELATIVE", "ISO", "FULL"];
+export const DATE_FORMATS = ["RELATIVE", "DAYS", "WEEKS"];
 
 const getDateDifference = (dateString: string) => {
   const start = new Date(dateString);
@@ -91,21 +91,19 @@ export const formatDate = (dateString: string, dateFormatIndex: number) => {
     return `${diffDays} day${diffDays > 1 ? "s" : ""}`;
   }
 
-  if (formatType === "ISO") {
-    const d = new Date(dateString);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+  if (formatType === "DAYS") {
+    return getDaysTogether(dateString);
   }
 
-  if (formatType === "FULL") {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+  if (formatType === "WEEKS") {
+    const now = new Date();
+    const pastDate = new Date(dateString);
+    const diffInMs = now.getTime() - pastDate.getTime();
+    const diffInWeeks = Math.floor(diffInMs / (1000 * 60 * 60 * 24 * 7));
+
+    if (diffInWeeks === 0) return "This week";
+    if (diffInWeeks === 1) return "1 week ago";
+    return `${diffInWeeks} weeks ago`;
   }
 
   return "";

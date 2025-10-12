@@ -10,6 +10,8 @@ import PrimaryButton from "./common/PrimaryButton";
 import PrimaryDateField from "./common/PrimaryDateField";
 import PrimaryTextField from "./common/PrimaryTextField";
 import PrimaryLoader from "./common/CoupleLoader";
+import { milestonesDropDown } from "@/utils/MilestoneUtils";
+import DropDown from "./common/DropDown";
 
 interface Props {
   visible: boolean;
@@ -22,10 +24,12 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [photo, setPhoto] = useState<string>("");
-  const [isAdd, setIsAdd] = useState<boolean>(id == null);
   const [userName, setUserName] = useState("");
   const [partnerName, setPartnerName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [dropDownValue, setDropDownValue] = useState(
+    id == null ? "" : "custom"
+  );
 
   const { themeName } = useTheme();
   const styles = createStyles(themeName);
@@ -50,10 +54,10 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
       if (id) {
         const match = parsed.find((m: Milestone) => m.id === id);
         if (match) {
+          setDropDownValue("custom");
           setDescription(match.description);
           setDate(match.date);
           setPhoto(match.photo);
-          setIsAdd(false);
         }
       }
       setIsLoading(false);
@@ -62,10 +66,12 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
     }
   };
 
-  const resetFields = () => {
+  const resetFields = async () => {
+    setDropDownValue("");
     setDescription("");
     setDate(new Date().toISOString().slice(0, 10));
     setPhoto("");
+    await setIsLoading(true);
   };
 
   const pickData = async () => {
@@ -76,11 +82,13 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
   const handleSave = async () => {
     try {
       let updatedMilestones = [...milestones];
+      var desp: string =
+        dropDownValue === "custom" ? description : dropDownValue;
 
-      if (isAdd) {
+      if (id == null) {
         const newMileStone: Milestone = {
           id: Date.now().toString().toString(),
-          description,
+          description: desp,
           date,
           photo,
           createdAt: new Date().toISOString(),
@@ -88,7 +96,7 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
         updatedMilestones.push(newMileStone);
       } else {
         updatedMilestones = updatedMilestones.map((m) =>
-          m.id === id ? { ...m, description, date, photo } : m
+          m.id === id ? { ...m, description: desp, date, photo } : m
         );
       }
 
@@ -114,20 +122,37 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
       <View style={styles.overlay}>
         <View style={styles.modalBox}>
           <Text style={styles.modalTitle}>
-            {isAdd ? text.Milestone.addMilestone : text.Milestone.editMilestone}
+            {id == null
+              ? text.Milestone.addMilestone
+              : text.Milestone.editMilestone}
           </Text>
           {isLoading ? (
             <PrimaryLoader />
           ) : (
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={styles.wrapper}>
-                <PrimaryTextField
-                  placeholder={text.Milestone.description}
-                  value={description}
-                  onChangeText={setDescription}
-                  required
-                />
-              </View>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              nestedScrollEnabled
+            >
+              {id == null && (
+                <View style={styles.wrapper}>
+                  <DropDown
+                    placeholder={text.Milestone.description}
+                    value={dropDownValue}
+                    onChange={setDropDownValue}
+                    items={milestonesDropDown}
+                  />
+                </View>
+              )}
+              {dropDownValue === "custom" && (
+                <View style={styles.wrapper}>
+                  <PrimaryTextField
+                    placeholder={id == null ? "" : text.Milestone.description}
+                    value={description}
+                    onChangeText={setDescription}
+                    required
+                  />
+                </View>
+              )}
               <View style={styles.wrapper}>
                 <PrimaryDateField
                   placeholder={text.Milestone.date}
@@ -159,7 +184,11 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
                   <PrimaryButton
                     title={text.Navigation.save}
                     onPress={handleSave}
-                    disabled={description == "" || date == ""}
+                    disabled={
+                      (dropDownValue == "custom"
+                        ? description == ""
+                        : dropDownValue == "") || date == ""
+                    }
                   />
                 </View>
               </View>
@@ -170,7 +199,8 @@ const MilestoneModel: React.FC<Props> = ({ visible, id = null, onClose }) => {
                   </Text>
                 )}
                 <Text style={styles.subtitle}>
-                  have been {description} | {date}
+                  {dropDownValue == "custom" ? description : dropDownValue} |{" "}
+                  {date}
                 </Text>
               </View>
             </ScrollView>
@@ -247,6 +277,7 @@ const createStyles = (themeName: ThemeName) => {
       marginBottom: 6,
       textAlign: "center",
     },
+    dropDownStyle: {},
   });
 };
 

@@ -52,7 +52,7 @@ export async function scheduleDailyNotification(
 
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: `You have been ${description} for ${dateFormat}`,
+      title: `You ${description} - ${dateFormat}`,
       body: "Keep going strong 💖",
       sound: "default",
       priority: Notifications.AndroidNotificationPriority.HIGH,

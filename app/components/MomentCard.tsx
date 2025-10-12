@@ -41,7 +41,7 @@ const MomentCard: React.FC<Props> = ({ item, onSelect }) => {
             <ImageBackground
               source={{ uri }}
               resizeMode="cover"
-              style={styles.previewImg}
+              style={[styles.previewImg, { aspectRatio: 16 / 9 }]}
             />
           )}
           getItemLayout={(data, index) => ({
@@ -97,7 +97,7 @@ const createStyles = (themeName: ThemeName) => {
     },
     previewImg: {
       width: width, // full screen width per slide
-      height: 160,
+      //height: 160,
     },
     imageSection: {
       width: width, // match FlatList width

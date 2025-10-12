@@ -145,7 +145,7 @@ export default function HomeScreen() {
               {userName} & {partnerName}
             </Text>
             <Text style={styles.subtitle}>
-              have been {item.description} | {item.date}
+              {item.description} | {item.date}
             </Text>
 
             {/* Date Section */}

@@ -104,17 +104,15 @@ const MilestoneOptions: React.FC<Props> = ({ onSelect }) => {
 
           const handlePress = () => {
             onSelect(icon.fn);
-            setVisible(false);
           };
 
           const handlePressIn = () => {
             anim.scale.value = withTiming(0.9, { duration: 100 });
-            setVisible(false);
           };
 
           const handlePressOut = () => {
             anim.scale.value = withTiming(1, { duration: 100 });
-            setVisible(false);
+            toggleMenu();
           };
 
           return (

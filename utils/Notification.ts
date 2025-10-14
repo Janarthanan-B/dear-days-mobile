@@ -1,6 +1,7 @@
-import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import * as Notifications from "expo-notifications";
 import { getDaysTogether } from "./DateUtils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -16,15 +17,12 @@ export async function registerForPushNotificationsAsync() {
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
       name: "Default Channel",
-      importance: Notifications.AndroidImportance.MAX,
+      importance: Notifications.AndroidImportance.HIGH,
+      sound: "default",
+      enableVibrate: true,
+      enableLights: true,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FFE9F6",
-      enableLights: true,
-      enableVibrate: true,
-      showBadge: true,
-      bypassDnd: false,
-      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
-      sound: "default",
     });
   }
 
@@ -35,6 +33,11 @@ export async function registerForPushNotificationsAsync() {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
   }
+
+  await AsyncStorage.setItem(
+    "@notificationsEnabled",
+    JSON.stringify(finalStatus === "granted")
+  );
 
   return finalStatus === "granted";
 }

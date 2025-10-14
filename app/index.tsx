@@ -67,25 +67,26 @@ export default function Index() {
   }, []);
 
   const loadData = async () => {
+    const granted = await registerForPushNotificationsAsync();
     const data = await AsyncStorage.getItem(milestoneKeyStore);
-    if (data != null) {
+    const notificationsEnabled = await AsyncStorage.getItem(
+      "@notificationsEnabled"
+    );
+
+    if (data) {
       SetScreen("main");
-      const granted = await registerForPushNotificationsAsync();
-      const storedNotifications = await AsyncStorage.getItem(
-        "@notificationsEnabled"
-      );
-      if (
-        granted &&
-        storedNotifications != null &&
-        JSON.parse(storedNotifications)
-      ) {
-        scheduleDailyNotification(
-          9,
+
+      if (granted && JSON.parse(notificationsEnabled || "false")) {
+        const milestone = JSON.parse(data)[0];
+        await scheduleDailyNotification(
+          6,
           0,
-          JSON.parse(data)[0].description,
-          JSON.parse(data)[0].date
+          milestone.description,
+          milestone.date
         );
       }
+    } else {
+      SetScreen("splash");
     }
   };
 

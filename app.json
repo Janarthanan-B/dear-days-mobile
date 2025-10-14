@@ -27,7 +27,8 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": ["android.permission.RECORD_AUDIO"],
-      "package": "com.janadev.deardays"
+      "package": "com.janadev.deardays",
+      "versionCode": 1
     },
     "web": {
       "output": "static",

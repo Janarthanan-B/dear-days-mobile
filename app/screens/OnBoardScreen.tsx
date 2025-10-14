@@ -13,7 +13,6 @@ import PrimaryButton from "../components/common/PrimaryButton";
 import PrimaryDateField from "../components/common/PrimaryDateField";
 import PrimaryTextField from "../components/common/PrimaryTextField";
 import { RootNavigatorParamsList } from "../index";
-import { registerForPushNotificationsAsync } from "@/utils/Notification";
 
 const { width, height } = Dimensions.get("screen");
 type Props = NativeStackScreenProps<RootNavigatorParamsList, "onBoard">;
@@ -26,17 +25,6 @@ const OnBoardScreen: React.FC<Props> = ({ navigation }) => {
   const [name, setName] = useState("");
   const [partnerName, setPartnerName] = useState("");
   const [date, setDate] = useState("");
-
-  useEffect(() => {
-    loadData();
-  }, []);
-  const loadData = async () => {
-    const granted = await registerForPushNotificationsAsync();
-    await AsyncStorage.setItem(
-      "@notificationsEnabled",
-      JSON.stringify(granted)
-    );
-  };
 
   const onButtonClick = async () => {
     await AsyncStorage.setItem(`@userName`, name);

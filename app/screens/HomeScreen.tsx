@@ -191,9 +191,12 @@ export default function HomeScreen() {
             decelerationRate="fast"
           />
         ) : (
-          <View style={styles.empty}>
-            <Text style={styles.emptyText}>No slides yet. Add one!</Text>
-          </View>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "#FFD5ED",
+            }}
+          />
         )}
       </Animated.View>
     </View>

@@ -28,9 +28,7 @@ import MomentsScreen from "./screens/MomentsScreen";
 import SettingScreen from "./screens/SettingScreen";
 import TodoScreen from "./screens/TodoScreen";
 
-import { getDaysTogether } from "@/utils/DateUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Notifications from "expo-notifications";
 import AboutUsScreen from "./screens/AboutUsScreen";
 import TermsPolicyScreen from "./screens/TermsPolicyScreen";
 import {
@@ -60,7 +58,9 @@ const Drawer = createDrawerNavigator<MainNavigatorParamsList>();
 
 export default function Index() {
   const milestoneKeyStore = "@milestones";
-  const [screen, SetScreen] = useState<"splash" | "main">("splash");
+  const [screen, setScreen] = useState<"loading" | "splash" | "main">(
+    "loading"
+  );
 
   useEffect(() => {
     loadData();
@@ -74,7 +74,7 @@ export default function Index() {
     );
 
     if (data) {
-      SetScreen("main");
+      setScreen("main");
 
       if (granted && JSON.parse(notificationsEnabled || "false")) {
         const milestone = JSON.parse(data)[0];
@@ -86,7 +86,7 @@ export default function Index() {
         );
       }
     } else {
-      SetScreen("splash");
+      setScreen("splash");
     }
   };
 
@@ -98,12 +98,22 @@ export default function Index() {
     Roboto_500Medium,
     Roboto_700Bold,
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || screen === "loading") {
     return (
-      <View style={{ flex: 1 }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading fonts...</Text>
-      </View>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#FFD5ED",
+        }}
+      />
+    );
+  }
+
+  if (screen === "main") {
+    return (
+      <ThemeProvider>
+        <MainStack />
+      </ThemeProvider>
     );
   }
   return (

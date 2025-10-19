@@ -13,6 +13,9 @@
       "icon": "./assets/logo/notification_icon.png",
       "color": "#FFE9F6"
     },
+    "splash": {
+      "backgroundColor": "#FFD5ED"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.janadev.deardays"
@@ -28,7 +31,8 @@
       "predictiveBackGestureEnabled": false,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "package": "com.janadev.deardays",
-      "versionCode": 1
+      "versionCode": 5,
+      "version": "1.0.1"
     },
     "web": {
       "output": "static",
@@ -38,7 +42,6 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/logo/dear_days.png",
           "backgroundColor": "#FFD5ED"
         }
       ],
